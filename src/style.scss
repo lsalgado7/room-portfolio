@@ -1,42 +1,295 @@
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+// style.scss
+@use "sass:color"; // <--- ADD THIS LINE AT THE TOP
+@use "./styles/fonts.scss";
+@use "./styles/reset.scss";
+@use "./styles/variables.scss" as vars;
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+// --- Variables (Match these to your variables.scss if they exist) ---
+$color-bg: #D3C6B5;       // Light beige from loading screen
+$color-border: #695D47;   // Dark moss/brown
+$color-text: #2B352C;     // Dark green/black
+$color-accent: #B6A48C;   // Sand
+$color-light: #e6dede;    // Off-white
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-// Experience 
-
-#experience {
+.loading-screen {
+  // ... keep your existing position/size/color styles ...
   position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  width: 108vw;
+  height: 108vh;
+  margin-left: -54vw;
+  margin-top: -54vh;
+  z-index: 999999;
+  border: 8px solid $color-accent; 
+  background-color: $color-border;
+  transform: perspective(1000px);
+  border-radius: 48px;
 
-  #experience-canvas {
-    height: 100%;
-    width: 100%;
-  }
+  // --- NEW FLEX LAYOUT ---
+  display: flex;
+  flex-direction: column; // Stacks items vertically
+  justify-content: center; // Centers them vertically
+  align-items: center;     // Centers them horizontally
 }
 
-// Modals
-.modal{
+.loading-screen-button {
+  font-family: "Maple Mono";
+  // If "vars.centered" errors, you can remove the next line:
+  @include vars.centered;
+  background-color: transparent;
+  padding: 10px 40px;
+  outline: none;
+  color: $color-light;
+  border-radius: 1.2rem;
+  border: none;
+  font-size: 42px;
+}
+
+.instructions {
+  margin-top: 2rem;       // Spacing between button and text
+  color: $color-light;    // Matches your theme
+  font-size: 1.2rem;
+  text-align: center;
+  font-family: "Maple Mono", monospace; // consistent font
+  display: none;          // Hide both by default, JS will turn one on
+}
+
+// --- FIX PAGE SCROLLING ---
+// This ensures the main 3D experience doesn't scroll, 
+// but your Modals (which have overflow-y: auto) still will.
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// --- Modal Base Styles ---
+.modal {
+  // Existing styles from your file
   position: absolute;
   top: 50%;
   left: 50%;
+  max-width: 800px; // Slightly wider for project layouts
+  width: 90%;       // Better mobile handling
   transform: translate(-50%, -50%);
-  font-size: 32px;
   z-index: 9999;
-  display: none;
-  background-color: black;
+  display: none; // Controlled by JS
+  
+  // New visual styles
+  background-color: $color-bg;
+  border: 4px solid $color-border;
+  border-radius: 20px;
+  color: $color-text;
+  box-shadow: 10px 10px 0px rgba(43, 53, 44, 0.2); // Retro drop shadow
+  padding: 0; // Padding handled by wrapper
+  overflow: hidden; 
+
+  .modal-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 85vh; // Prevents modal from being taller than screen
+  }
+
+  .modal-title {
+    text-align: center;
+    font-size: 2rem;
+    padding: 20px;
+    border-bottom: 2px dashed $color-border;
+    margin-bottom: 0;
+    background-color: rgba(255,255,255,0.2);
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+}
+
+// --- Content Scroll Area ---
+.modal-content {
+  flex: 1;
+  overflow-y: auto; // Enables scrolling inside the modal
+  padding: 30px;
+  
+  // Custom Scrollbar
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $color-border;
+    border-radius: 5px;
+    border: 2px solid $color-bg;
+  }
+}
+
+// --- Typography & Utilities ---
+.modal-paragraph-header {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: $color-border;
+  font-weight: bold;
+  
+  &.xsm-margin-top { margin-top: 10px; }
+}
+
+.modal-paragraph-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  
+  &.sm-font { font-size: 0.9rem; opacity: 0.8; }
+  &.sm-margin-top { margin-top: 15px; }
+}
+
+ul {
+  padding-left: 20px;
+  margin-top: 10px;
+  li { margin-bottom: 5px; }
+}
+
+// --- WORK MODAL SPECIFIC ---
+.work-project {
+  background-color: rgba(255,255,255,0.4);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease;
+
+  &:hover {
+    border-color: $color-border;
+  }
+
+  .work-project-wrapper {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .work-image-wrapper {
+    flex: 0 0 200px; // Fixed width for images
+    height: 150px;
+    background-color: $color-accent;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid $color-border;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .paragraph-section {
+    flex: 1;
+  }
+}
+
+// --- ABOUT MODAL SPECIFIC ---
+.about .image-wrapper {
+  float: left;
+  width: 150px;
+  height: 150px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  background-color: $color-accent;
+  border-radius: 50%; // Circular profile pic
+  border: 4px solid $color-border;
+  overflow: hidden;
+  shape-outside: circle(50%); // Text wraps around circle
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// --- CONTACT MODAL SPECIFIC ---
+.contact-button-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 15px;
+  background-color: $color-border;
+  color: $color-light;
+  border-radius: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px rgba(0,0,0,0.15);
+    // FIXED LINE BELOW:
+    background-color: color.adjust($color-border, $lightness: 10%);
+  }
+
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px transparent;
+  }
+}
+
+// --- EXIT BUTTON ---
+.modal-exit-button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  background-color: $color-border;
+  color: $color-light;
+  font-family: inherit;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-top: 2px solid rgba(0,0,0,0.1);
+  transition: background 0.2s;
+
+  &:hover {
+    // FIXED LINE BELOW:
+    background-color: color.adjust($color-border, $lightness: 10%);
+  }
+}
+
+// --- RESPONSIVE ADJUSTMENTS ---
+@media (max-width: 768px) {
+  .modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+
+  .work-project-wrapper {
+    flex-direction: column; // Stack image on top of text
+  }
+
+  .work-image-wrapper {
+    width: 100%; // Full width image on mobile
+    flex: none;
+    height: 200px;
+  }
+
+  .about .image-wrapper {
+    float: none;
+    margin: 0 auto 20px auto; // Center profile pic
+    display: block;
+  }
+  
+  .modal-title {
+    font-size: 1.5rem;
+  }
 }

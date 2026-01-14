@@ -1,150 +1,75 @@
+// main.js
 import './style.scss'
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import gsap from "gsap"
+import { OrbitControls } from './utils/orbit-controls.js';
+import { initLoadingScreen } from './loading-screen.js';
+
+// Imported Modules
+import { socialLinks, textureMap, notClickable, hoverItems } from './mappings.js';
+import { modals, initModalEvents, showModal } from './modals.js';
+import { playClickAnimation, playHoverAnimation } from './animations.js';
+import { gltfLoader, loadedTextures } from './loaders.js';
+import { glassMaterial, createVideoMaterial } from './materials.js';
+import { raycaster, pointer, setupRaycasterEvents } from './raycasts.js';
 
 const canvas = document.querySelector("#experience-canvas");
-const sizes ={
+const sizes = {
   height: window.innerHeight,
   width: window.innerWidth
 }
 
-// ---- CREATING POP UP WINDOWS ----
-const modals = {
-  work: document.querySelector(".modal.work"),
-  about: document.querySelector(".modal.about"),
-  contact: document.querySelector(".modal.contact")
-}
+initLoadingScreen();
 
-document.querySelectorAll(".modal-exit-button").forEach(button=> {
-  button.addEventListener("click", (e) => {
-    const modal = e.target.closest(".modal");
-    hideModal(modal);
-  })
-})
-
-const showModal = (modal) => {
-  modal.style.display = "block"
-
-  gsap.set(modal, {opacity: 0});
-
-  gsap.to(modal, {
-    opacity: 1,
-    duration: 0.5,
-  });
-}
-
-const hideModal = (modal) => {
-  gsap.to(modal, {
-    opacity:0,
-    duration: 0.5,
-    onComplete: ()=> {
-      modal.style.display = "none";
-    }
-  });
-}
-
-const fans = [];
-
-const raycasterObjects = [];
-let currentIntersects = []
-
-const socialLinks = {
-  "github" : "https://github.com/lsalgado7",
-  "linkedin" : "https://www.linkedin.com/in/lsalgado7/"
-}
-
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
-
+// Scene Setup
 const scene = new THREE.Scene();
+const screenMaterial = createVideoMaterial();
+const fans = [];
+const raycasterObjects = [];
 
-// Loaders
-const textureLoader = new THREE.TextureLoader();
+// State variables for interaction
+let currentIntersects = []
+let currentHoveredObject = null;
 
-// Model Loader
-const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('/draco/');
+// Camera
+const camera = new THREE.PerspectiveCamera(
+  35,
+  sizes.width / sizes.height,
+  0.1,
+  1000
+);
+camera.position.set(14.546610594521159, 10.11721024371067, -14.476390073543648);
 
-const loader = new GLTFLoader();
-loader.setDRACOLoader(dracoLoader);
+// Renderer
+const renderer = new THREE.WebGLRenderer({canvas:canvas, antialias: true });
+renderer.setSize(sizes.width, sizes.height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-const environmentMap = new THREE.CubeTextureLoader()
-  .setPath('textures/skybox/')
-  .load( [
-    'px.webp',
-    'nx.webp',
-    'py.webp',
-    'ny.webp',
-    'pz.webp',
-    'nz.webp',
-  ])
+// Controls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.minDistance = 5;
+controls.maxDistance = 35;
+controls.minPolarAngle = 0;
+controls.maxPolarAngle = Math.PI / 2;
+controls.minAzimuthAngle = Math.PI / 2;
+controls.maxAzimuthAngle = Math.PI;
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.update();
+controls.target.set(0.5127399372523783, 4.046808560932034, -0.1731077747794347);
 
-const textureMap = {
-  First:"/textures/room/TS_one.webp",
-  Second:"/textures/room/TS_two.webp",
-  Third:"/textures/room/TS_three.webp",
-  Fourth:"/textures/room/TS_four.webp",
-  Fifth:"/textures/room/TS_five.webp",
-  Sixth:"/textures/room/TS_six.webp",
-  one:"/textures/room/TS_one.webp",
-  two:"/textures/room/TS_two.webp",
-  three:"/textures/room/TS_three.webp",
-  four:"/textures/room/TS_four.webp",
-  five:"/textures/room/TS_five.webp",
-  six:"/textures/room/TS_six.webp"
-};
+let isModalOpen = false;
+// Init DOM events
+setupRaycasterEvents(isModalOpen);
+initModalEvents(controls);
 
-const loadedTextures = {};
+// Raycaster Interaction Logic
+function handleRaycasterInteraction() {
+  if (event.target !== canvas) return;
 
-Object.entries(textureMap).forEach(([key, paths]) => {
-  const texture = textureLoader.load(paths)
-  texture.flipY = false;
-  texture.colorSpace = THREE.SRGBColorSpace;
-  loadedTextures[key] = texture;
-})
-
-const glassMaterial = new THREE.MeshPhysicalMaterial({
-  color: 0xb5b5b5,
-  transmission: 1,
-  opacity: 1,
-  metalness: 0,
-  roughness: 0,
-  ior: 1.5,
-  thickness: 0.01,
-  specularIntensity: 1,
-  envMap: environmentMap,
-  specularColor: 0xb5b5b5,
-  envMapIntensity: 1
-})
-
-const videoElement = document.createElement("video");
-videoElement.src = "/textures/video/Screen.mp4"
-videoElement.loop = true;
-videoElement.muted = true;
-videoElement.playsInline = true;
-videoElement.autoplay = true;
-videoElement.play()
-
-const videoTexture = new THREE.VideoTexture(videoElement)
-videoTexture.colorSpace = THREE.SRGBColorSpace
-videoTexture.flipY = false;
-
-const screenMaterial = new THREE.MeshBasicMaterial({
-  map: videoTexture,
-});
-
-window.addEventListener("mousemove", (e)=>{
-  pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
-  pointer.y = - (e.clientY / window.innerHeight) * 2 + 1;
-});
-
-window.addEventListener("click", (e) =>{
-  if(currentIntersects.length>0) {
+  if(currentIntersects.length > 0) {
     const object = currentIntersects[0].object;
 
+    // if clicked social link, take user to link
     Object.entries(socialLinks).forEach(([key, url]) =>{
       if (object.name.includes(key)) {
         const newWindow = window.open();
@@ -155,42 +80,61 @@ window.addEventListener("click", (e) =>{
       }
     });
 
+    // if clicked modal button, display modal
     if (object.name.includes('click_work')) {
-      showModal(modals.work);
+      isModalOpen = true;
+      showModal(modals.work, controls);
     } else if (object.name.includes('click_about')) {
-      showModal(modals.about);
+      isModalOpen = true;
+      showModal(modals.about, controls);
     } else if (object.name.includes('click_contact')) {
-      showModal(modals.contact);
+      isModalOpen = true;
+      showModal(modals.contact, controls);
+    }
+
+    // if clicked animatable object, animate
+    if(!notClickable.some(name => object.name.includes(name)) &&
+    !hoverItems.some(name => object.name.includes(name))) {
+      playClickAnimation(object);
     }
   }
-});
+}
 
-const notClickable = ['key', 'fan', 'glass', 'First',
-  'Second', 'Third', 'Fourth', 'Fifth', 'Sixth',
-  'screen', 'mouse', 'monitor', 'chair'
-]
+// Interaction Listeners
+window.addEventListener("touchend", (e) =>{
+  e.preventDefault();
+  handleRaycasterInteraction(e);
+}, { passive:false });
 
-loader.load("/models/Room_Portfolio.glb", (glb)=>{
-  glb.scene.traverse(child=>{
+window.addEventListener("click", handleRaycasterInteraction);
+
+// Load 3D Model
+gltfLoader.load("/models/Room_Portfolio.glb", (glb)=>{
+  glb.scene.traverse(child => {
     if(child.isMesh){
-
+      // make desktop hitbox invisible
       if (child.name.includes('click_desktop')) {
         child.material.visible = false;
       }
-
+      
+      // get interactable objects
       if(!notClickable.some(name => child.name.includes(name))) {
         raycasterObjects.push(child);
+        child.userData.initialScale = new THREE.Vector3().copy(child.scale);
+        child.userData.initialPosition = new THREE.Vector3().copy(child.position);
+        child.userData.initialRotation = new THREE.Euler().copy(child.rotation);
       }
 
+      // assign glass/screen materials
       if(child.name.includes("glass")){
         child.material = glassMaterial;
       } else if (child.name.includes("screen")){
         child.material = screenMaterial;
 
+        // UV Fix Logic for computer screen
         const uvs = child.geometry.attributes.uv;
         let minU = Infinity, minV = Infinity, maxU = -Infinity, maxV = -Infinity;
 
-        // 1. Find the current range of the UVs
         for (let i = 0; i < uvs.count; i++) {
           const u = uvs.getX(i);
           const v = uvs.getY(i);
@@ -200,17 +144,11 @@ loader.load("/models/Room_Portfolio.glb", (glb)=>{
           if (v > maxV) maxV = v;
         }
 
-        // 2. Normalize the UVs (stretch them to 0-1)
         for (let i = 0; i < uvs.count; i++) {
           const u = uvs.getX(i);
           const v = uvs.getY(i);
-              
-          // Calculate normalized 0-1 values
           const normalizedU = (u - minU) / (maxU - minU);
           const normalizedV = (v - minV) / (maxV - minV);
-              
-          // Swap X and Y to rotate 90 degrees. 
-          // We use (1 - normalizedU) to fix the orientation direction.
           uvs.setXY(i, normalizedV, normalizedU);
         }
         
@@ -239,70 +177,56 @@ loader.load("/models/Room_Portfolio.glb", (glb)=>{
   scene.add(glb.scene);
 });
 
-const camera = new THREE.PerspectiveCamera(
-  35,
-  sizes.width / sizes.height,
-  0.1,
-  1000
-);
-camera.position.set(14.546610594521159, 10.11721024371067, -14.476390073543648);
-
-const renderer = new THREE.WebGLRenderer({canvas:canvas, antialias: true });
-renderer.setSize(sizes.width, sizes.height);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.update();
-controls.target.set(0.5127399372523783, 4.046808560932034, -0.1731077747794347);
-
-// Event Listeners
+// Resize
 window.addEventListener("resize", ()=>{
   sizes.width = window.innerWidth
-
   sizes.height = window.innerHeight
 
-  // Update Camera
   camera.aspect = sizes.width / sizes.height
   camera.updateProjectionMatrix();
 
-  // Update renderer
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
+// Render Loop
 const render = () =>{
   controls.update();
   
-  fans.forEach(fan=>{
+  fans.forEach(fan => {
     fan.rotation.y += 0.05
   })
 
   // Raycaster
   raycaster.setFromCamera(pointer, camera);
-  
-  // calculate objects intersecting the picking ray
   currentIntersects = raycaster.intersectObjects(raycasterObjects);
 
-  for (let i=0; i < currentIntersects.length; i++){
-
-  }
-
-  if(currentIntersects.length>0){
+  // check if mouse is over a valid object
+  if(currentIntersects.length > 0){
     const currentIntersectObject = currentIntersects[0].object
 
+    // if a clickable, do hover animation things
     if(currentIntersectObject.name.includes("click")) {
+      if (currentIntersectObject !== currentHoveredObject) {
+        if (currentHoveredObject) {
+          playHoverAnimation(currentHoveredObject, false);
+        }
+        playHoverAnimation(currentIntersectObject, true);
+        currentHoveredObject = currentIntersectObject;
+      }
       document.body.style.cursor = "pointer"
     } else{
       document.body.style.cursor = "default"
     }
   } else{
+    if (currentHoveredObject) {
+      playHoverAnimation(currentHoveredObject, false);
+    }
+    currentHoveredObject = null;
     document.body.style.cursor = "default"
   }
   
   renderer.render(scene, camera);
-
   window.requestAnimationFrame(render);
 }
 

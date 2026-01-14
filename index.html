@@ -5,21 +5,168 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>room-portfolio</title>
+    <link rel="stylesheet" href="./src/style.scss" />
+    
+    <meta name="language" content="English" />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="Portfolio Website" />
   </head>
-  <body>
+  
+  <body class="light-theme">
     <div id="app"></div>
 
+    <div class="loading-screen">
+      <button class="loading-screen-button">Loading...</button>
+      
+      <p class="desktop-instructions instructions">use left/right click and mouse wheel to navigate!</p>
+      <p class="mobile-instructions instructions">use one or two fingers to navigate!</p>
+    </div>
+
+    <div class="overlay"></div>
+
     <div class="work modal">
-      <h1 class="modal-title">workworkworkworkworkworkwork</h1>
-      <button class="modal-exit-button">EXIT MODALLLL</button>
+      <div class="modal-wrapper">
+        <h1 class="modal-title">~ My Work ~</h1>
+
+        <div class="modal-content">
+          <div class="modal-content-wrapper">
+            
+            <div class="work-project">
+              <div class="work-project-wrapper">
+                <div class="work-image-wrapper">
+                  [Project Image 1 Placeholder]
+                </div>
+                <div class="paragraph-section">
+                  <h2 class="modal-paragraph-header">Project Title 1</h2>
+                  <p class="modal-paragraph-text">
+                    Project description goes here.
+                  </p>
+                  <p class="modal-paragraph-text sm-margin-top sm-font">
+                    Skills: Skill A, Skill B, Skill C
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="work-project">
+              <div class="work-project-wrapper">
+                <div class="work-image-wrapper">
+                  [Project Image 2 Placeholder]
+                </div>
+                <div class="paragraph-section">
+                  <h2 class="modal-paragraph-header">Project Title 2</h2>
+                  <p class="modal-paragraph-text">
+                   Project description goes here.
+                  </p>
+                  <p class="modal-paragraph-text sm-margin-top sm-font">
+                    Skills: Skill A, Skill B
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="work-project">
+                <div class="work-project-wrapper">
+                  <div class="work-image-wrapper">
+                    [Project Image 3 Placeholder]
+                  </div>
+                  <div class="paragraph-section">
+                    <h2 class="modal-paragraph-header">Project Title 3</h2>
+                    <p class="modal-paragraph-text">
+                     Project description goes here.
+                    </p>
+                    <p class="modal-paragraph-text sm-margin-top sm-font">
+                      Skills: Skill A, Skill B
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+          </div>
+        </div>
+      </div>
+      
+      <button class="modal-exit-button">
+        [EXIT]
+      </button>
     </div>
+
     <div class="about modal">
-      <h1 class="modal-title">aboutaboutaboutaboutaboutabout</h1>
-      <button class="modal-exit-button">EXIT MODALLLL</button>
+      <div class="modal-wrapper">
+        <h1 class="modal-title">~ About Me ~</h1>
+
+        <div class="modal-content">
+          <div class="modal-content-wrapper">
+            <div class="paragraph-section">
+              <div class="image-wrapper">
+                [Profile Pic Placeholder]
+              </div>
+              <h2 class="modal-paragraph-header">
+                Your Headline Here
+              </h2>
+              <p class="modal-paragraph-text">
+                Introduction text...
+              </p>
+              <p class="modal-paragraph-text sm-margin-top">
+                Hobbies and interests...
+              </p>
+
+              <h2 class="modal-paragraph-header">What I'm Up To:</h2>
+              <ul>
+                <li class="list-text">
+                  Current activity 1
+                </li>
+                <li class="list-text">
+                  Current activity 2
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <button class="modal-exit-button">
+        [EXIT]
+      </button>
     </div>
+
     <div class="contact modal">
-      <h1 class="modal-title">contactjkdlsa;jf eafklds;ajfisadojk;</h1>
-      <button class="modal-exit-button">EXIT MODALLLL</button>
+      <div class="modal-wrapper">
+        <h1 class="modal-title">~ Say hello! ~</h1>
+
+        <div class="modal-content">
+          <div class="modal-content-wrapper">
+            <div class="paragraph-section">
+              <h2 class="modal-paragraph-header xsm-margin-top">
+                Let's connect!
+              </h2>
+              <div class="contact-button-wrapper">
+                
+                <a class="contact-link" href="#" target="_blank" rel="noopener noreferrer">
+                  [Email]
+                </a>
+                
+                <a class="contact-link" href="#" target="_blank" rel="noopener noreferrer">
+                  [GitHub]
+                </a>
+                
+                <a class="contact-link" href="#" target="_blank" rel="noopener noreferrer">
+                   [LinkedIn]
+                </a>
+                
+                <a class="contact-link" href="#" target="_blank" rel="noopener noreferrer">
+                   [Social]
+                </a>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <button class="modal-exit-button">
+        [EXIT]
+      </button>
     </div>
 
     <div id="experience">

@@ -1,0 +1,15 @@
+$moss: #2B352C;
+$prarie-grass: #695D47;
+$coffee: #896C4A;
+$autumn: #8E511B;
+$sand: #B6A48C;
+$wheat: #D3C6B5;
+
+$base-black: #0e0e0e;
+$base-white: #efefef;
+
+@mixin centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
