@@ -3,12 +3,61 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import gsap from "gsap"
 
 const canvas = document.querySelector("#experience-canvas");
 const sizes ={
   height: window.innerHeight,
   width: window.innerWidth
 }
+
+// ---- CREATING POP UP WINDOWS ----
+const modals = {
+  work: document.querySelector(".modal.work"),
+  about: document.querySelector(".modal.about"),
+  contact: document.querySelector(".modal.contact")
+}
+
+document.querySelectorAll(".modal-exit-button").forEach(button=> {
+  button.addEventListener("click", (e) => {
+    const modal = e.target.closest(".modal");
+    hideModal(modal);
+  })
+})
+
+const showModal = (modal) => {
+  modal.style.display = "block"
+
+  gsap.set(modal, {opacity: 0});
+
+  gsap.to(modal, {
+    opacity: 1,
+    duration: 0.5,
+  });
+}
+
+const hideModal = (modal) => {
+  gsap.to(modal, {
+    opacity:0,
+    duration: 0.5,
+    onComplete: ()=> {
+      modal.style.display = "none";
+    }
+  });
+}
+
+const fans = [];
+
+const raycasterObjects = [];
+let currentIntersects = []
+
+const socialLinks = {
+  "github" : "https://github.com/lsalgado7",
+  "linkedin" : "https://www.linkedin.com/in/lsalgado7/"
+}
+
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
 
 const scene = new THREE.Scene();
 
@@ -85,11 +134,54 @@ videoTexture.flipY = false;
 
 const screenMaterial = new THREE.MeshBasicMaterial({
   map: videoTexture,
-})
+});
+
+window.addEventListener("mousemove", (e)=>{
+  pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = - (e.clientY / window.innerHeight) * 2 + 1;
+});
+
+window.addEventListener("click", (e) =>{
+  if(currentIntersects.length>0) {
+    const object = currentIntersects[0].object;
+
+    Object.entries(socialLinks).forEach(([key, url]) =>{
+      if (object.name.includes(key)) {
+        const newWindow = window.open();
+        newWindow.opener = null;
+        newWindow.location = url;
+        newWindow.target = "_blank";
+        newWindow.rel = "noopener noreferrer";
+      }
+    });
+
+    if (object.name.includes('click_work')) {
+      showModal(modals.work);
+    } else if (object.name.includes('click_about')) {
+      showModal(modals.about);
+    } else if (object.name.includes('click_contact')) {
+      showModal(modals.contact);
+    }
+  }
+});
+
+const notClickable = ['key', 'fan', 'glass', 'First',
+  'Second', 'Third', 'Fourth', 'Fifth', 'Sixth',
+  'screen', 'mouse', 'monitor', 'chair'
+]
 
 loader.load("/models/Room_Portfolio.glb", (glb)=>{
   glb.scene.traverse(child=>{
     if(child.isMesh){
+
+      if (child.name.includes('click_desktop')) {
+        child.material.visible = false;
+      }
+
+      if(!notClickable.some(name => child.name.includes(name))) {
+        raycasterObjects.push(child);
+      }
+
       if(child.name.includes("glass")){
         child.material = glassMaterial;
       } else if (child.name.includes("screen")){
@@ -123,6 +215,7 @@ loader.load("/models/Room_Portfolio.glb", (glb)=>{
         }
         
         uvs.needsUpdate = true;
+
       } else {
         Object.keys(textureMap).forEach(key=>{
           if(child.name.includes(key)){
@@ -130,6 +223,10 @@ loader.load("/models/Room_Portfolio.glb", (glb)=>{
               map: loadedTextures[key],
             });
             child.material = material;
+
+            if(child.name.includes('fan')){
+              fans.push(child);
+            }
 
             if(child.material.map){
               child.material.map.minFilter = THREE.LinearFilter;
@@ -178,10 +275,32 @@ window.addEventListener("resize", ()=>{
 const render = () =>{
   controls.update();
   
-  console.log(camera.position);
-  console.log("000000000");
-  console.log(controls.target);
+  fans.forEach(fan=>{
+    fan.rotation.y += 0.05
+  })
 
+  // Raycaster
+  raycaster.setFromCamera(pointer, camera);
+  
+  // calculate objects intersecting the picking ray
+  currentIntersects = raycaster.intersectObjects(raycasterObjects);
+
+  for (let i=0; i < currentIntersects.length; i++){
+
+  }
+
+  if(currentIntersects.length>0){
+    const currentIntersectObject = currentIntersects[0].object
+
+    if(currentIntersectObject.name.includes("click")) {
+      document.body.style.cursor = "pointer"
+    } else{
+      document.body.style.cursor = "default"
+    }
+  } else{
+    document.body.style.cursor = "default"
+  }
+  
   renderer.render(scene, camera);
 
   window.requestAnimationFrame(render);
