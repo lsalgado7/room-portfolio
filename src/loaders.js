@@ -29,5 +29,9 @@ Object.entries(textureMap).forEach(([key, paths]) => {
   const texture = textureLoader.load(paths)
   texture.flipY = false;
   texture.colorSpace = THREE.SRGBColorSpace;
+
+  texture.minFilter = THREE.LinearFilter; 
+  texture.generateMipmaps = false;
+
   loadedTextures[key] = texture;
 });

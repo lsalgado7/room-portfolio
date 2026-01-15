@@ -81,30 +81,21 @@ export function playHoverAnimation(object, isHovering) {
   }
 }
 
-let isModalOpen = false;
-
-export const showModalAnimation = (modal, controls) => {
-  modal.style.display = "block"
-  // var for modal
-  isModalOpen = true;
-  if (controls) controls.enabled = false;
-
-
-  gsap.set(modal, {opacity: 0});
-  gsap.to(modal, {
+export const showModalAnimation = (modal) => {
+  modal.style.display = "block";
+  gsap.set(modal, { opacity: 0 });
+  return gsap.to(modal, {
     opacity: 1,
     duration: 0.5,
   });
-}
+};
 
-export const hideModalAnimation = (modal, controls) => {
-  gsap.to(modal, {
-    opacity:0,
+export const hideModalAnimation = (modal) => {
+  return gsap.to(modal, {
+    opacity: 0,
     duration: 0.5,
-    onComplete: ()=> {
+    onComplete: () => {
       modal.style.display = "none";
-      isModalOpen = false;
-      controls.enabled = true;
     }
   });
-}
+};

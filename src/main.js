@@ -6,7 +6,7 @@ import { initLoadingScreen } from './loading-screen.js';
 
 // Imported Modules
 import { socialLinks, textureMap, notClickable, hoverItems } from './mappings.js';
-import { modals, initModalEvents, showModal } from './modals.js';
+import { modals, initModalEvents, showModal, isModalActive } from './modals.js';
 import { playClickAnimation, playHoverAnimation } from './animations.js';
 import { gltfLoader, loadedTextures } from './loaders.js';
 import { glassMaterial, createVideoMaterial } from './materials.js';
@@ -57,14 +57,13 @@ controls.dampingFactor = 0.05;
 controls.update();
 controls.target.set(0.5127399372523783, 4.046808560932034, -0.1731077747794347);
 
-let isModalOpen = false;
 // Init DOM events
-setupRaycasterEvents(isModalOpen);
+setupRaycasterEvents(canvas, handleRaycasterInteraction);
 initModalEvents(controls);
 
 // Raycaster Interaction Logic
-function handleRaycasterInteraction() {
-  if (event.target !== canvas) return;
+function handleRaycasterInteraction(event) {
+  if (isModalActive || (event && event.target !== canvas)) return;
 
   if(currentIntersects.length > 0) {
     const object = currentIntersects[0].object;
@@ -82,13 +81,10 @@ function handleRaycasterInteraction() {
 
     // if clicked modal button, display modal
     if (object.name.includes('click_work')) {
-      isModalOpen = true;
       showModal(modals.work, controls);
     } else if (object.name.includes('click_about')) {
-      isModalOpen = true;
       showModal(modals.about, controls);
     } else if (object.name.includes('click_contact')) {
-      isModalOpen = true;
       showModal(modals.contact, controls);
     }
 
@@ -101,12 +97,15 @@ function handleRaycasterInteraction() {
 }
 
 // Interaction Listeners
-window.addEventListener("touchend", (e) =>{
-  e.preventDefault();
+/*
+window.addEventListener("touchstart", (e) => {
+  // Prevent default behavior like scrolling/zooming on touch
+  if (e.target === canvas) {
+    e.preventDefault();
+  }
   handleRaycasterInteraction(e);
-}, { passive:false });
-
-window.addEventListener("click", handleRaycasterInteraction);
+}, { passive: false });
+*/
 
 // Load 3D Model
 gltfLoader.load("/models/Room_Portfolio.glb", (glb)=>{
@@ -189,54 +188,69 @@ window.addEventListener("resize", ()=>{
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
+let colliding = false;
+
 // Render Loop
 const render = () =>{
   controls.update();
+
+  /*
+  Used to get camera starting camera position
 
   console.log(
     `Position: ${camera.position.x}, ${camera.position.y}, ${camera.position.z} | ` +
     `Rotation: ${camera.rotation.x}, ${camera.rotation.y}, ${camera.rotation.z} | ` +
     `Target: ${controls.target.x}, ${controls.target.y}, ${controls.target.z}`
   );
-  /*
-  Position: 15.717788027775475, 12.999056165580686, -30.399979518146132 | 
-  Rotation: -2.853654682610619, 0.4494052823573926, 3.0136312075082774 | 
-  Target: 0.5127399372523783, 4.046808560932034, -0.1731077747794347
   */
+  
+  // Raycaster
+  if (!isModalActive) {
+    raycaster.setFromCamera(pointer, camera);
+    currentIntersects = raycaster.intersectObjects(raycasterObjects);
+
+    if (currentIntersects.length > 0) {
+      const currentIntersectObject = currentIntersects[0].object;
+
+      if (currentIntersectObject.name.includes("click")) {
+        // We are hitting a valid button
+        colliding = false; 
+
+        if (currentIntersectObject !== currentHoveredObject) {
+          if (currentHoveredObject) {
+            playHoverAnimation(currentHoveredObject, false);
+          }
+          playHoverAnimation(currentIntersectObject, true);
+          currentHoveredObject = currentIntersectObject;
+        }
+        document.body.style.cursor = "pointer";
+      } else {
+        // We hit a mesh, but it's not a button
+        colliding = true;
+      }
+    } else {
+      // We hit empty space
+      colliding = true;
+    }
+  } else {
+    // Modal is open, treat as "not colliding with 3D objects"
+    colliding = true;
+  }
+
+  // Handle "Hover Out"
+  if (colliding) {
+    if (currentHoveredObject) {
+      playHoverAnimation(currentHoveredObject, false);
+      currentHoveredObject = null;
+    }
+    document.body.style.cursor = "default";
+    colliding = false; // Reset for the next frame
+  }
   
   fans.forEach(fan => {
     fan.rotation.y += 0.05
   })
 
-  // Raycaster
-  raycaster.setFromCamera(pointer, camera);
-  currentIntersects = raycaster.intersectObjects(raycasterObjects);
-
-  // check if mouse is over a valid object
-  if(currentIntersects.length > 0){
-    const currentIntersectObject = currentIntersects[0].object
-
-    // if a clickable, do hover animation things
-    if(currentIntersectObject.name.includes("click")) {
-      if (currentIntersectObject !== currentHoveredObject) {
-        if (currentHoveredObject) {
-          playHoverAnimation(currentHoveredObject, false);
-        }
-        playHoverAnimation(currentIntersectObject, true);
-        currentHoveredObject = currentIntersectObject;
-      }
-      document.body.style.cursor = "pointer"
-    } else{
-      document.body.style.cursor = "default"
-    }
-  } else{
-    if (currentHoveredObject) {
-      playHoverAnimation(currentHoveredObject, false);
-    }
-    currentHoveredObject = null;
-    document.body.style.cursor = "default"
-  }
-  
   renderer.render(scene, camera);
   window.requestAnimationFrame(render);
 }
