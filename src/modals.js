@@ -27,5 +27,20 @@ export function initModalEvents(controls) {
   })
 }
 
+// Add this logic to your event listeners
+const showMoreButtons = document.querySelectorAll('.show-more-btn');
+
+showMoreButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    // Finds the .text-clamp-container div
+    const container = button.previousElementSibling; 
+    
+    const isCollapsed = container.classList.toggle('collapsed');
+    
+    // Update the button text based on state
+    button.textContent = isCollapsed ? 'Show more...' : 'Show less';
+  });
+});
+
 export const showModal = showModalAnimation;
 export const hideModal = hideModalAnimation;

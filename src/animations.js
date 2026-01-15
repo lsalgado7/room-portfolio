@@ -4,22 +4,28 @@ import * as THREE from 'three';
 
 // used by clickable animations
 export function playClickAnimation(object) {
-  gsap.killTweensOf(object.scale);
-    const scaleVal = new THREE.Vector3(1.4, 1.4, 1.4);
+    // 1. Kill existing tweens so spamming clicks doesn't break things
+    gsap.killTweensOf(object.scale);
 
-    gsap.to(object.scale, {
+    const scaleVal = new THREE.Vector3(1.15, 1.15, 1.15);
+
+    // 2. Create a timeline to sequence the steps
+    const tl = gsap.timeline();
+
+    // 3. Chain your animations
+    tl.to(object.scale, {
         x: object.userData.initialScale.x * scaleVal.x,
         y: object.userData.initialScale.y * scaleVal.y,
         z: object.userData.initialScale.z * scaleVal.z,
-        duration: 0.3, 
-        ease: "power1.out" // Makes the direction change smoother
-    });
-    gsap.to(object.scale, {
+        duration: 0.2, 
+        ease: "power2.out"
+    })
+    .to(object.scale, {
         x: object.userData.initialScale.x,
         y: object.userData.initialScale.y,
         z: object.userData.initialScale.z,
-        duration: 0.3, 
-        ease: "power2.in" // Makes the direction change smoother
+        duration: 0.2, 
+        ease: "power2.in"
     });
 }
 

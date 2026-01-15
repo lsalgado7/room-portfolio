@@ -37,7 +37,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(14.546610594521159, 10.11721024371067, -14.476390073543648);
+camera.position.set(15.717788027775475, 12.999056165580686, -30.399979518146132 );
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({canvas:canvas, antialias: true });
@@ -192,6 +192,17 @@ window.addEventListener("resize", ()=>{
 // Render Loop
 const render = () =>{
   controls.update();
+
+  console.log(
+    `Position: ${camera.position.x}, ${camera.position.y}, ${camera.position.z} | ` +
+    `Rotation: ${camera.rotation.x}, ${camera.rotation.y}, ${camera.rotation.z} | ` +
+    `Target: ${controls.target.x}, ${controls.target.y}, ${controls.target.z}`
+  );
+  /*
+  Position: 15.717788027775475, 12.999056165580686, -30.399979518146132 | 
+  Rotation: -2.853654682610619, 0.4494052823573926, 3.0136312075082774 | 
+  Target: 0.5127399372523783, 4.046808560932034, -0.1731077747794347
+  */
   
   fans.forEach(fan => {
     fan.rotation.y += 0.05
