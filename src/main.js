@@ -212,7 +212,7 @@ const render = () =>{
     if (currentIntersects.length > 0) {
       const currentIntersectObject = currentIntersects[0].object;
 
-      if (currentIntersectObject.name.includes("click")) {
+      if (currentIntersectObject.name.includes("click") && !currentIntersectObject.name.includes("desktop")) {
         // We are hitting a valid button
         colliding = false; 
 
