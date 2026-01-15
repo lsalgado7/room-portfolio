@@ -32,16 +32,14 @@ export function initModalEvents(controls) {
       touchHappened = true;
       e.preventDefault();
       const modal = e.target.closest(".modal");
-      hideModalAnimation(modal, controls);
-      isModalActive = false;
+      hideModal(modal, controls);
     }, {passive:false});
 
     button.addEventListener("click", (e) => {
       if(touchHappened) return;
       e.preventDefault();
       const modal = e.target.closest(".modal");
-      hideModalAnimation(modal, controls);
-      isModalActive = false;
+      hideModal(modal, controls);
     }, {passive:false});
   })
 }
@@ -54,8 +52,10 @@ export const showModal = (modal, controls) => {
 };
 
 export const hideModal = (modal, controls) => {
-  hideModalAnimation(modal).then(() => {
-    isModalActive = false;
-    if (controls) controls.enabled = true; // Re-enable OrbitControls
-  });
+  hideModalAnimation(modal);
+  isModalActive = false;
+  if (controls) {
+    controls.enabled = true; // Re-enable OrbitControls
+    controls.update();
+  }
 };

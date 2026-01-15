@@ -84,18 +84,19 @@ export function playHoverAnimation(object, isHovering) {
 export const showModalAnimation = (modal) => {
   modal.style.display = "block";
   gsap.set(modal, { opacity: 0 });
-  return gsap.to(modal, {
+  gsap.to(modal, {
     opacity: 1,
     duration: 0.5,
   });
 };
 
 export const hideModalAnimation = (modal) => {
-  return gsap.to(modal, {
+  gsap.to(modal, {
     opacity: 0,
     duration: 0.5,
     onComplete: () => {
       modal.style.display = "none";
+      if (onCompleteCallback) onCompleteCallback();
     }
   });
 };
