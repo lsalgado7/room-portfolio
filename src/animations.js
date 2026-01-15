@@ -93,7 +93,7 @@ export const showModalAnimation = (modal) => {
 export const hideModalAnimation = (modal) => {
   gsap.to(modal, {
     opacity: 0,
-    duration: 0.5,
+    duration: 0.2,
     onComplete: () => {
       modal.style.display = "none";
       if (onCompleteCallback) onCompleteCallback();
