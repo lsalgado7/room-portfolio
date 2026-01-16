@@ -4,6 +4,7 @@ import { isModalActive } from './modals.js';
 import { socialLinks, notClickable, hoverItems } from './mappings.js';
 import { playClickAnimation, playHoverAnimation } from './animations.js';
 import { showModal, modals } from './modals.js';
+import { camera, raycasterObjects } from './main.js';
 
 export const raycaster = new THREE.Raycaster();
 export const pointer = new THREE.Vector2();
@@ -25,8 +26,11 @@ export function setupRaycasterEvents(canvas, ctrls) {
     if (e.target === canvas) {
       pointer.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
       pointer.y = - (e.touches[0].clientY / window.innerHeight) * 2 + 1;
-      e.preventDefault(); 
-      handleRaycasterInteraction(currentObject, ctrls); // No need to pass 'e' if we use the pointer variable
+      
+      const object = performRaycast();
+      handleRaycasterInteraction(object, ctrls);
+
+      e.preventDefault();
     }
   }, { passive: false });
 
@@ -34,13 +38,17 @@ export function setupRaycasterEvents(canvas, ctrls) {
     if (e.target === canvas && !isModalActive) {
       pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
       pointer.y = - (e.clientY / window.innerHeight) * 2 + 1;
-      handleRaycasterInteraction(currentObject, ctrls);
+
+      const object = performRaycast();
+      handleRaycasterInteraction(object, ctrls);
     }
   });
 }
 
 // update hover state for objects in scene
-export function updateObjectHover(object) {
+export function updateObjectHover() {
+  const object = performRaycast();
+
   if (isModalActive || !object || !object.name) {
     resetHover();
     return;
@@ -69,6 +77,24 @@ export function clearCurrentObject() {
 }
 
 // --- HELPER FUNCTIONS ---
+
+function performRaycast() {
+  if (isModalActive) {
+    currentObject = null;
+    return null;
+  }
+
+  raycaster.setFromCamera(pointer, camera);
+  const intersects = raycaster.intersectObjects(raycasterObjects);
+
+  if (intersects.length > 0) {
+    currentObject = intersects[0].object;
+    return currentObject;
+  }
+  
+  currentObject = null;
+  return null;
+}
 
 // Run for 3D Clicks
 function handleRaycasterInteraction(object, controls) {

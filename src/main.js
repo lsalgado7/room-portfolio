@@ -21,10 +21,10 @@ initLoadingScreen();
 const scene = new THREE.Scene();
 
 // State variables for interaction
-const raycasterObjects = [];
+export const raycasterObjects = [];
 
 // Camera
-const camera = new THREE.PerspectiveCamera(
+export const camera = new THREE.PerspectiveCamera(
   35,
   sizes.width / sizes.height,
   0.1,
@@ -55,7 +55,7 @@ setupRaycasterEvents(canvas, controls);
 initModalEvents(controls);
 
 // Load Models
-loadRoomScene(scene, raycasterObjects);
+loadRoomScene(scene);
 
 // Resize
 window.addEventListener("resize", ()=>{
@@ -74,6 +74,7 @@ const render = () =>{
   // Update controls
   controls.update();
 
+  /*
   let targetObject = null;
 
   // If Modal isn't open, 
@@ -85,9 +86,9 @@ const render = () =>{
       targetObject = intersects[0].object;
     }
   }
-
+  */
   // Updates object hover state
-  updateObjectHover(targetObject);
+  updateObjectHover();
   
   fans.forEach(fan => {
     fan.rotation.y += 0.05

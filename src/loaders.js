@@ -4,6 +4,7 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { textureMap, notClickable } from './mappings.js';
 import { createVideoMaterial, initMaterials, glassMaterial } from './materials.js';
+import { raycasterObjects } from './main.js';
 
 export const manager = new THREE.LoadingManager();
 const textureLoader = new THREE.TextureLoader();
@@ -32,7 +33,7 @@ Object.entries(textureMap).forEach(([key, paths]) => {
 });
 
 // New function to handle the room loading logic
-export const loadRoomScene = (scene, raycasterObjects) => {
+export const loadRoomScene = (scene) => {
   initMaterials(manager);
   const screenMaterial = createVideoMaterial();
 
