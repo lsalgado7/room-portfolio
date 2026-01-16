@@ -1,6 +1,5 @@
 // materials.js
 import * as THREE from 'three';
-import { environmentMap } from './loaders.js';
 
 export const glassMaterial = new THREE.MeshPhysicalMaterial({
   color: 0xb5b5b5,
@@ -11,10 +10,19 @@ export const glassMaterial = new THREE.MeshPhysicalMaterial({
   ior: 1.5,
   thickness: 0.01,
   specularIntensity: 1,
-  envMap: environmentMap,
   specularColor: 0xb5b5b5,
-  envMapIntensity: 1
+  envMapIntensity: 0.5
 });
+
+export function initMaterials(manager) {
+  const envLoader = new THREE.CubeTextureLoader(manager);
+  const environmentMap = envLoader.setPath('textures/skybox/').load([
+    'px.webp', 'nx.webp', 'py.webp', 
+    'ny.webp', 'pz.webp', 'nz.webp',
+  ]);
+  glassMaterial.envMap = environmentMap;
+  glassMaterial.needsUpdate = true;
+}
 
 export function createVideoMaterial() {
   const videoElement = document.createElement("video");

@@ -1,5 +1,6 @@
 // modals.js
 import { showModalAnimation, hideModalAnimation } from './animations.js';
+import { clearCurrentObject } from './raycasts.js';
 
 export let isModalActive = false;
 
@@ -52,6 +53,7 @@ export const showModal = (modal, controls) => {
 };
 
 export const hideModal = (modal, controls) => {
+  clearCurrentObject();
   hideModalAnimation(modal);
   isModalActive = false;
   if (controls) {

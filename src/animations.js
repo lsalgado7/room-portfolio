@@ -96,7 +96,7 @@ export const hideModalAnimation = (modal) => {
     duration: 0.2,
     onComplete: () => {
       modal.style.display = "none";
-      if (onCompleteCallback) onCompleteCallback();
+      if (typeof onCompleteCallback == 'function') onCompleteCallback();
     }
   });
 };
