@@ -11,6 +11,17 @@ export function initLoadingScreen() {
     const desktopText = document.querySelector(".desktop-instructions");
     const mobileText = document.querySelector(".mobile-instructions");
 
+    // Track mouse movement to update the radial gradient center
+    window.addEventListener("mousemove", (e) => {
+      // Calculate percentage based on window size
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+
+      // Apply variables to the loading screen container
+      loadingScreen.style.setProperty('--mouse-x', `${x}%`);
+      loadingScreen.style.setProperty('--mouse-y', `${y}%`);
+    });
+
     // --- DEVICE DETECTION LOGIC ---
     // Check if device supports touch events
     const isTouchDevice = 
@@ -25,6 +36,8 @@ export function initLoadingScreen() {
         desktopText.style.display = "block";
         mobileText.style.display = "none";
     }
+
+    document.body.classList.add(isTouchDevice ? 'is-mobile' : 'is-desktop');
 
     // State tracking
     let isLoaded = false;
@@ -75,26 +88,50 @@ export function initLoadingScreen() {
     // 3. Reveal Animation
     function playReveal() {
         const tl = gsap.timeline();
-
-        tl.to(".landing-content", {
+        
+        // Fade out everything inside the wrapper
+        tl.to(".landing-wrapper", {
             opacity: 0,
-            duration: 0.4
+            y: -20,
+            duration: 0.5
         });
-
-        tl.to(loadingScreen, {
+    
+        // Existing "shrink and drop" effect
+        tl.to(".loading-screen", {
             scale: 0.5,
-            duration: 1.2,
+            duration: 1.0,
             delay: 0.25,
-            ease: "back.in(1.8)",
-        }).to(loadingScreen, {
+            ease: "back.in(1.2)",
+        }).to(".loading-screen", {
             y: "200vh",
             duration: 1.2,
             ease: "back.in(1.8)",
             onComplete: () => {
-                loadingScreen.style.display = "none";
-                // If you have an intro animation for the camera, trigger it here:
-                // playIntroAnimation(); 
+                document.querySelector(".loading-screen").style.display = "none";
             },
-        }, "-=0.1");
+        }, "-=0.2");
     }
+}
+
+export function returnToLanding() {
+    const loadingScreen = document.querySelector(".loading-screen");
+    const loadingScreenButton = document.querySelector(".loading-screen-button");
+    
+    // 1. Reset the button text back to "Enter!"
+    if (loadingScreenButton) {
+        loadingScreenButton.textContent = "Enter!";
+    }
+
+    loadingScreen.style.display = "block";
+    
+    gsap.to(loadingScreen, {
+        y: "0",
+        scale: 1,
+        duration: 1.2,
+        ease: "expo.out",
+        onStart: () => {
+            // Re-fade in the landing content
+            gsap.to(".landing-wrapper", { opacity: 1, delay: 0.5 });
+        }
+    });
 }

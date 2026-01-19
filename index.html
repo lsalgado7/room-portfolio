@@ -16,35 +16,119 @@
     <div id="app"></div>
 
     <div class="loading-screen">
-      <div class="landing-content">
-        <header class="landing-header">
-          <h1 class="resume-paragraph-header" style="font-size: 3.5rem;">Levi Salgado</h1>
-          <p class="resume-paragraph-text">Data Science Student & Creative Developer</p>
-        </header>
-      
-        <div class="landing-bio">
-          <p class="resume-paragraph-text sm-margin-top">
-            Welcome to my portfolio. I specialize in data visualization, 3D web experiences, and machine learning. 
-            Explore my work below or enter the 3D environment for the full experience.
-          </p>
-        </div>
-      
-        <div class="landing-work-preview">
-          <div class="work-project" style="background: rgba(255,255,255,0.1); border: 1px solid #B6A48C;">
-            <h2 class="resume-paragraph-header">Featured Project</h2>
-            <p class="resume-paragraph-text sm-font">3D Room Portfolio - Built with Three.js & Blender</p>
+      <div class="dynamic-bg"></div>
+
+      <div class="landing-wrapper">
+        <aside class="landing-sidebar">
+          <div class="sidebar-top">
+            <h1 class="resume-paragraph-header" style="font-size: 2.5rem;">Levi Salgado</h1>
+            <p class="resume-paragraph-text sm-font">Eugene, OR</p>
           </div>
-        </div>
-      </div>
-    
-      <div class="loading-controls">
-        <p class="desktop-instructions instructions">use left/right click and<br>mouse wheel to navigate!</p>
-        <p class="mobile-instructions instructions">use one or two fingers to navigate!</p>
-        <button class="loading-screen-button">Loading...</button>
+
+          <section class="sidebar-about">
+            <h2 class="resume-paragraph-header" style="font-size: 1rem; margin-top: 20px;">Welcome!</h2>
+            <p class="resume-paragraph-text sm-font" style="opacity: 0.8; line-height: 1.4;">
+              Once you get aquainted with my professional side, feel free to enter my 3D space and learn more about my personal side!
+              Built with <strong>Three.js</strong> and <strong>Blender</strong> to visualize what I'm about.
+            </p>
+          </section>
+
+          <section class="loading-controls">
+            <p class="desktop-instructions instructions">ready to explore?</p>
+            <p class="mobile-instructions instructions">tap to explore!</p>
+            <button class="loading-screen-button">Loading...</button>
+          </section>
+
+          <div class="sidebar-links">
+            <a href="/Levi_Salgado_Resume.pdf" download class="contact-link email" style="font-size: 0.8rem; padding: 10px;">
+              [Download Resume PDF]
+            </a>
+            <a href="https://github.com/lsalgado7" target="_blank" class="contact-link github">[GitHub]</a>
+            <a href="https://www.linkedin.com/in/lsalgado7/" target="_blank" class="contact-link linkedin">[LinkedIn]</a>
+          </div>
+        </aside>
+      
+        <main class="landing-main">
+          <section class="landing-section">
+            <h2 class="resume-paragraph-header">Education</h2>
+            <div class="work-project slim">
+              <h3 class="resume-paragraph-header" style="font-size: 1.1rem;">University of Oregon</h3>
+              <p class="resume-paragraph-text sm-font">B.S. Data Science (Economics Focus) | Minor in CS </p>
+              <p class="resume-paragraph-text sm-font" style="opacity: 0.7;">Expected Graduation: June 2026</p>
+            </div>
+          </section>
+
+          <section class="landing-section">
+            <h2 class="resume-paragraph-header">Technical Projects</h2>
+
+            <div class="work-project slim">
+              <h3 class="resume-paragraph-header" style="font-size: 1.2rem;">3D Room Portfolio</h3>
+              <p class="resume-paragraph-text sm-font">Javascript • THREE.js • Blender • SCSS</p>
+            </div>
+          
+            <div class="work-project slim">
+              <h3 class="resume-paragraph-header" style="font-size: 1.2rem;">Runner Game</h3>
+              <p class="resume-paragraph-text sm-font">C# • Unity • Asset Animation • Git</p>
+            </div>
+          
+            <div class="work-project slim">
+              <h3 class="resume-paragraph-header" style="font-size: 1.2rem;">Project Larry (ML)</h3>
+              <p class="resume-paragraph-text sm-font">Python • Machine Learning • Data Collection</p>
+            </div>
+          </section>
+        
+          <section class="landing-section">
+            <h2 class="resume-paragraph-header">Professional Experience</h2>
+            
+            <div class="work-project slim">
+              <h3 class="resume-paragraph-header" style="font-size: 1.1rem;">Research Assistant</h3>
+              <p class="resume-paragraph-text sm-font">University of Oregon | 2025 - Present</p>
+              <p class="resume-paragraph-text sm-font" style="opacity: 0.7;">Assisting in neuroscience research using C#, Python, Unity, and Blender.</p>
+            </div>
+          
+            <div class="work-project slim">
+              <h3 class="resume-paragraph-header" style="font-size: 1.1rem;">Student Communications Technician</h3>
+              <p class="resume-paragraph-text sm-font">University of Oregon | 2024 - Present</p>
+              <p class="resume-paragraph-text sm-font" style="opacity: 0.7;">Developing data processing applications in Python to drive insights on security and documentation.</p>
+            </div>
+          </section>
+        
+          <section class="landing-section">
+            <h2 class="resume-paragraph-header">Technical Proficiencies</h2>
+            <p class="resume-paragraph-text sm-font">
+              Python, SQL, R, Bash, C#, Web Dev (THREE.js), and 3D Modeling (Blender).
+            </p>
+          </section>
+        </main>
       </div>
     </div>
 
     <div class="overlay"></div>
+      <div class="ui-controls-wrapper">
+        <button id="help-icon" class="help-icon-btn">?</button>
+        <button id="back-to-landing" class="back-home-btn">
+          <span class="icon">⬅</span> Profile
+        </button>
+      </div>
+
+      <div id="tips-box" class="tips-container">
+        <div class="tips-header">
+          <h3 class="resume-paragraph-header" style="font-size: 1rem;">Navigation Tips</h3>
+        </div>
+      
+        <ul class="desktop-instructions resume-paragraph-text sm-font">
+          <li>• <strong>Left Click:</strong> Rotate</li>
+          <li>• <strong>Right Click:</strong> Pan</li>
+          <li>• <strong>Scroll:</strong> Zoom</li>
+          <li>• <strong>'H' Key:</strong> Toggle UI</li>
+        </ul>
+      
+        <ul class="mobile-instructions resume-paragraph-text sm-font">
+          <li>• <strong>One Finger:</strong> Rotate</li>
+          <li>• <strong>Two Fingers:</strong> Pan/Zoom</li>
+          <li>• <strong>Tap:</strong> Interact</li>
+        </ul>
+      </div>
 
     <div class="work modal">
       <div class="modal-wrapper">

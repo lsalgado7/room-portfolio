@@ -2,7 +2,7 @@
 import './style.scss'
 import * as THREE from 'three';
 import { OrbitControls } from './utils/orbit-controls.js';
-import { initLoadingScreen } from './loading-screen.js';
+import { initLoadingScreen, returnToLanding } from './landing-page.js';
 
 // Imported Modules
 import { initModalEvents, isModalActive } from './modals.js';
@@ -14,8 +14,6 @@ const sizes = {
   height: window.innerHeight,
   width: window.innerWidth
 }
-
-initLoadingScreen();
 
 // Scene Setup
 const scene = new THREE.Scene();
@@ -57,6 +55,9 @@ initModalEvents(controls);
 // Load Models
 loadRoomScene(scene);
 
+// ready loading screen
+initLoadingScreen();
+
 // Resize
 window.addEventListener("resize", ()=>{
   sizes.width = window.innerWidth
@@ -68,6 +69,38 @@ window.addEventListener("resize", ()=>{
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
+
+function setupTipsToggle() {
+  const tipsBox = document.getElementById('tips-box');
+  const helpIcon = document.getElementById('help-icon');
+  
+  const toggleTips = () => {
+    tipsBox.classList.toggle('hidden');
+  };
+
+  // Keyboard 'H' Toggle
+  window.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 'h') toggleTips();
+  });
+
+  // Help Icon Click
+  helpIcon.addEventListener('click', toggleTips);
+}
+
+function setupNavigation() {
+    const backBtn = document.getElementById('back-to-landing');
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            returnToLanding();
+        });
+    }
+}
+
+// Call this alongside your other setup functions
+setupNavigation();
+
+// Call this in your main initialization
+setupTipsToggle();
 
 // Render Loop
 const render = () =>{
