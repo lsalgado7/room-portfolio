@@ -28,13 +28,15 @@ $color-light: #e6dede;    // Off-white
   background-color: $color-border; // Beige background
   display: flex;
   overflow-y: auto;
-  overflow: hidden;
+  overflow: hidden !important;
   box-sizing: border-box; 
   padding: 50px;
   border: 8px solid $color-accent;
   border-radius: 48px;
   margin: 0;
   transform: perspective(1000px);
+
+  overscroll-behavior: none;
 
   .dynamic-bg {
     position: absolute;
@@ -46,7 +48,7 @@ $color-light: #e6dede;    // Off-white
     // Animating between your $color-border and a slightly lighter variant
     background: radial-gradient(
       circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-      rgba(#62a88f, 0.6) 0%,
+      rgba(#274239, 0.6) 0%,
       rgba(#3d5844, 1) 100%
     );
 
@@ -57,7 +59,7 @@ $color-light: #e6dede;    // Off-white
   .about-mobile { display: block; }
 
   @media (min-width: 768px) {
-    overflow-y: auto;
+    overflow-y: hidden;
     display: block;
     padding: 60px; // More breathing room on desktop
 
@@ -82,13 +84,13 @@ $color-light: #e6dede;    // Off-white
     display: flex;
     width: 100%;
     height: 100%;
-    overflow-y: auto;
+    overflow: hidden;
     padding: 60px;
     gap: 40px;
 
     @media (max-width: 768px) {
       flex-direction: column;
-      overflow-y: auto;
+      overflow-y: hidden;
       padding: 30px;
     }
   }
@@ -177,20 +179,19 @@ $color-light: #e6dede;    // Off-white
     max-width: 950px;
     overflow-y: auto;
 
+    overscroll-behavior: contain;
+
     // Custom scrollbar for the main content area
     &::-webkit-scrollbar {
-      width: 6px;
+      display: none;
     }
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    &::-webkit-scrollbar-thumb {
-      background: rgba($color-light, 0.3);
-      border-radius: 10px;
-    }
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
     
     .landing-section {
       margin-bottom: 40px;
+      position: relative;
+      overflow: visible !important;
     }
 
     .work-project.slim {
@@ -198,12 +199,35 @@ $color-light: #e6dede;    // Off-white
       border: 1px solid rgba($color-accent, 0.3);
       padding: 15px;
       margin-bottom: 15px;
-      
-      &:hover {
-        background: rgba($color-light, 0.1);
-        border-color: $color-accent;
-      }
     }
+  }
+}
+
+.sidebar-profile-img {
+  width: 75%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid $color-accent; //
+  margin-bottom: 20px;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.1);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 768px) {
+    width: 80px; // Slightly smaller for mobile headers
+    height: 80px;
+    margin: 0 auto 15px auto; // Center it on mobile
+  }
+}
+
+// Center the mobile top section for a cleaner look
+@media (max-width: 768px) {
+  .sidebar-top {
+    text-align: center;
   }
 }
 
@@ -631,5 +655,211 @@ ul {
   
   .modal-title {
     font-size: 1.5rem;
+  }
+}
+
+// Container to hold the cards
+.projects-container {
+  display: flex;
+  flex-direction: column; // Vertical stacking
+  gap: 25px;
+  margin-top: 20px;
+}
+
+// Remove default link styles
+.project-card-link {
+  text-decoration: none;
+  display: block; // Ensures the link fills the area of the card
+  color: inherit;
+  
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.project-vertical-card {
+  cursor: pointer;
+  background: rgba($color-light, 0.05);
+  border: 1px solid rgba($color-accent, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba($color-light, 0.1);
+    border-color: $color-accent;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+    .card-image img {
+      transform: scale(1.05); // Subtle zoom effect on the image
+    }
+
+    .card-title {
+      color: $color-accent; // Highlight title on hover
+    }
+  }
+
+  .card-title {
+    font-family: "Maple Mono NF", monospace;
+    font-size: 1.3rem;
+    color: $color-light;
+    margin-bottom: 15px;
+  }
+
+.card-image {
+  position: relative; // Required for absolute positioning of the overlay
+  width: 100%;
+  height: 160px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  border: 1px solid rgba($color-light, 0.1);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color-text, 0.7); // Using your dark green variable
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0; // Hidden by default
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(2px); // Subtle modern blur effect
+  }
+
+  .overlay-text {
+    color: $color-light;
+    font-family: "Maple Mono NF", monospace;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border: 1px solid $color-light;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transform: translateY(10px);
+    transition: transform 0.3s ease;
+  }
+}
+
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 5px;
+  }
+
+  .tech-bubble {
+    font-size: 0.75rem;
+    font-family: "Maple Mono NF", monospace;
+    padding: 4px 12px;
+    background-color: rgba($color-accent, 0.2);
+    color: $color-accent;
+    border: 1px solid rgba($color-accent, 0.4);
+    border-radius: 20px; // Makes them oval/pill shaped
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Responsive: switch to grid on wider screens if desired
+@media (min-width: 900px) {
+  .projects-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; // Show two side-by-side on desktop
+  }
+}
+
+// Trigger overlay visibility when the CARD is hovered
+.project-vertical-card:hover {
+  .image-overlay {
+    opacity: 1;
+  }
+
+  .overlay-text {
+    transform: translateY(0); // Slight slide-up animation
+  }
+
+  .card-image img {
+    transform: scale(1.1);
+  }
+}
+
+.skills-container {
+  display: flex;
+  flex-wrap: wrap; // Allows bubbles to flow to the next line
+  gap: 12px;
+  margin-top: 15px;
+  // Extra padding on the bottom/top ensures scaling bubbles 
+  // don't hit the container boundaries
+  padding: 10px 5px;
+}
+
+.skill-bubble {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  background-color: rgba($color-accent, 0.1);
+  color: $color-light;
+  border: 1px solid rgba($color-accent, 0.4);
+  border-radius: 50px; // High value creates the pill/oval shape
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+  cursor: default;
+
+  &:hover {
+    background-color: rgba($color-accent, 0.25);
+    border-color: $color-accent;
+    transform: scale(1.15);
+    color: $color-accent;
+    z-index: 999;            // Keeps the hovered bubble above the others
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  // --- Color Coding Logic ---
+
+  // Programming: Using $color-text (Dark Green) style
+  &.prog {
+    background-color: rgba(vars.$prog, 0.2);
+    color: color.adjust(vars.$prog, $lightness: 40%);
+    border-color: rgba(vars.$prog, 0.4);
+    &:hover { border-color: vars.$prog; background-color: rgba(vars.$prog, 0.4); }
+  }
+
+  // Data: Using $color-accent (Sand) style
+  &.data {
+    background-color: rgba(vars.$data, 0.15);
+    color: vars.$data;
+    border-color: rgba(vars.$data, 0.4);
+    &:hover { border-color: vars.$data; background-color: rgba(vars.$data, 0.3); }
+  }
+
+  // Design: Using $color-bg (Beige) style
+  &.design {
+    background-color: rgba(vars.$desn, 0.1);
+    color: color.adjust(vars.$desn, $lightness: 10%);
+    border-color: rgba(vars.$desn, 0.3);
+    &:hover { border-color: vars.$desn; background-color: rgba(vars.$desn, 0.2); }
+  }
+
+  // Tools: Using $color-light (Off-white) style
+  &.tool {
+    background-color: rgba(vars.$tool, 0.1);
+    color: vars.$tool;
+    border-color: rgba(vars.$tool, 0.3);
+    &:hover { border-color: vars.$tool; background-color: rgba(vars.$tool, 0.2); }
   }
 }
