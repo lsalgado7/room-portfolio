@@ -54,7 +54,13 @@ $color-light: #e6dede;    // Off-white
   }
 
   @media (min-width: 768px) {
+    overflow-y: auto;
+    display: block;
     padding: 60px; // More breathing room on desktop
+
+    // Toggle About Text visibility
+    .about-mobile { display: none; }
+    .about-desktop { display: block; }
   }
 
   .landing-content {
