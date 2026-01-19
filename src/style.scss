@@ -6,53 +6,79 @@
 
 // --- Variables (Match these to your variables.scss if they exist) ---
 $color-bg: #D3C6B5;       // Light beige from loading screen
-$color-border: #695D47;   // Dark moss/brown
-$color-text: #2B352C;     // Dark green/black
+$color-border: #695D47;   // Dark brown
+$color-text: #2B352C;     // Dark green
 $color-accent: #B6A48C;   // Sand
 $color-light: #e6dede;    // Off-white
 
 .loading-screen {
-  // ... keep your existing position/size/color styles ...
   position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 108vw;
-  height: 108vh;
-  margin-left: -54vw;
-  margin-top: -54vh;
+  top: -20px; 
+  left: -20px;
+  width: calc(100vw + 40px);
+  height: calc(100vh + 40px);
   z-index: 999999;
-  border: 8px solid $color-accent; 
-  background-color: $color-border;
-  transform: perspective(1000px);
+  background-color: $color-border; // Beige background
+  display: block; // Changed from flex to block for scrolling
+  overflow-y: auto;
+  box-sizing: border-box; 
+  padding: 50px;
+  border: 8px solid $color-accent;
   border-radius: 48px;
+  margin: 0;
+  transform: perspective(1000px);
 
-  // --- NEW FLEX LAYOUT ---
-  display: flex;
-  flex-direction: column; // Stacks items vertically
-  justify-content: center; // Centers them vertically
-  align-items: center;     // Centers them horizontally
-}
+  @media (min-width: 768px) {
+    padding: 60px; // More breathing room on desktop
+  }
 
-.loading-screen-button {
-  font-family: "Maple Mono NF";
-  // If "vars.centered" errors, you can remove the next line:
-  @include vars.centered;
-  background-color: transparent;
-  padding: 10px 40px;
-  outline: none;
-  color: $color-light;
-  border-radius: 1.2rem;
-  border: none;
-  font-size: 42px;
-}
+  .landing-content {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding-bottom: 150px; // Space for the fixed button
+    font-family: "Maple Mono NF", monospace;
 
-.instructions {
-  margin-top: 2rem;       // Spacing between button and text
-  color: $color-light;    // Matches your theme
-  font-size: 1.2rem;
-  text-align: center;
-  font-family: "Maple Mono NF", monospace; // consistent font
-  display: none;          // Hide both by default, JS will turn one on
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  // Anchor the Loading UI to the Bottom Right
+  .loading-controls {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    pointer-events: none; // Allow clicks through to content behind text
+
+    .instructions {
+      display: none; // Still controlled by your JS device detection
+      margin-bottom: 10px;
+      color: $color-light;
+      font-size: 0.9rem;
+      text-align: right;
+    }
+
+    .loading-screen-button {
+      font-family: "Maple Mono NF";
+      // If "vars.centered" errors, you can remove the next line:
+      @include vars.centered;
+      background-color: transparent;
+      padding: 10px 20px;
+      outline: none;
+      color: $color-light;
+      border-radius: 1.2rem;
+      border: none;
+      font-size: 24px;
+
+      pointer-events: auto;
+      // Your existing styles will still apply, but you may want a shadow:
+      //box-shadow: 8px 8px 0px rgba(43, 53, 44, 0.2);
+    }
+  }
 }
 
 // --- FIX PAGE SCROLLING ---
@@ -132,6 +158,24 @@ body {
 }
 
 // --- Typography & Utilities ---
+.resume-paragraph-header {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: $color-light;
+  font-weight: bold;
+  
+  &.xsm-margin-top { margin-top: 10px; }
+}
+
+.resume-paragraph-text {
+  font-size: 1rem;
+  color: $color-light;
+  line-height: 1.6;
+  
+  &.sm-font { font-size: 0.9rem; opacity: 0.8; }
+  &.sm-margin-top { margin-top: 15px; }
+}
+
 .modal-paragraph-header {
   font-size: 1.5rem;
   margin-bottom: 10px;

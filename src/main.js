@@ -74,19 +74,6 @@ const render = () =>{
   // Update controls
   controls.update();
 
-  /*
-  let targetObject = null;
-
-  // If Modal isn't open, 
-  if (!isModalActive) {
-    raycaster.setFromCamera(pointer, camera);
-    const intersects = raycaster.intersectObjects(raycasterObjects);
-
-    if (intersects.length > 0) {
-      targetObject = intersects[0].object;
-    }
-  }
-  */
   // Updates object hover state
   updateObjectHover();
   

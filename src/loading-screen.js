@@ -76,6 +76,11 @@ export function initLoadingScreen() {
     function playReveal() {
         const tl = gsap.timeline();
 
+        tl.to(".landing-content", {
+            opacity: 0,
+            duration: 0.4
+        });
+
         tl.to(loadingScreen, {
             scale: 0.5,
             duration: 1.2,
