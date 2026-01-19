@@ -53,6 +53,9 @@ $color-light: #e6dede;    // Off-white
     transition: background 3s ease;
   }
 
+  .about-desktop { display: none; }
+  .about-mobile { display: block; }
+
   @media (min-width: 768px) {
     overflow-y: auto;
     display: block;
