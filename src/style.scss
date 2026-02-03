@@ -585,6 +585,7 @@ ul {
   &.email { background-color: #896C4A; }    // Using $coffee from variables
   &.github { background-color: #2b352c; }   // Using $moss from variables
   &.linkedin { background-color: #0077b5; } // Standard LinkedIn Blue
+  &.resume { background-color: vars.$autumn; } // Standard LinkedIn Blue
 
   &:hover {
     transform: translate(-2px, -2px);
@@ -812,7 +813,7 @@ ul {
   font-weight: bold;
   padding: 8px 16px;
   background-color: rgba($color-accent, 0.1);
-  color: $color-light;
+  color: vars.$wheat;
   border: 1px solid rgba($color-accent, 0.4);
   border-radius: 50px; // High value creates the pill/oval shape
   display: inline-flex;
@@ -824,7 +825,7 @@ ul {
     background-color: rgba($color-accent, 0.25);
     border-color: $color-accent;
     transform: scale(1.15);
-    color: $color-accent;
+    color: vars.$base-white;
     z-index: 999;            // Keeps the hovered bubble above the others
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
@@ -834,7 +835,6 @@ ul {
   // Programming: Using $color-text (Dark Green) style
   &.prog {
     background-color: rgba(vars.$prog, 0.2);
-    color: color.adjust(vars.$prog, $lightness: 40%);
     border-color: rgba(vars.$prog, 0.4);
     &:hover { border-color: vars.$prog; background-color: rgba(vars.$prog, 0.4); }
   }
@@ -842,7 +842,6 @@ ul {
   // Data: Using $color-accent (Sand) style
   &.data {
     background-color: rgba(vars.$data, 0.15);
-    color: vars.$data;
     border-color: rgba(vars.$data, 0.4);
     &:hover { border-color: vars.$data; background-color: rgba(vars.$data, 0.3); }
   }
@@ -850,7 +849,6 @@ ul {
   // Design: Using $color-bg (Beige) style
   &.design {
     background-color: rgba(vars.$desn, 0.1);
-    color: color.adjust(vars.$desn, $lightness: 10%);
     border-color: rgba(vars.$desn, 0.3);
     &:hover { border-color: vars.$desn; background-color: rgba(vars.$desn, 0.2); }
   }
@@ -858,7 +856,6 @@ ul {
   // Tools: Using $color-light (Off-white) style
   &.tool {
     background-color: rgba(vars.$tool, 0.1);
-    color: vars.$tool;
     border-color: rgba(vars.$tool, 0.3);
     &:hover { border-color: vars.$tool; background-color: rgba(vars.$tool, 0.2); }
   }
