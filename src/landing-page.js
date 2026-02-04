@@ -5,6 +5,16 @@ import gsap from "gsap";
 export function initLoadingScreen() {
     const loadingScreen = document.querySelector(".loading-screen");
     const loadingScreenButton = document.querySelector(".loading-screen-button");
+    const landingWrapper = document.querySelector(".landing-wrapper");
+    const landingMain = document.querySelector(".landing-main");
+
+    /*
+    // Allows for scrolling on sidebar to still interact with main page
+    landingWrapper.addEventListener("wheel", (e) => {
+        if (e.target.closest(".landing-main")) return;
+        landingMain.scrollTop += e.deltaY;
+    });
+    */
     // const noSoundButton = document.querySelector(".no-sound-button"); // currently unused
     
     // Select the instruction texts
@@ -129,6 +139,7 @@ export function returnToLanding() {
         scale: 1,
         duration: 1.2,
         ease: "expo.out",
+        clearProps: "transform",
         onStart: () => {
             // Re-fade in the landing content
             gsap.to(".landing-wrapper", { opacity: 1, delay: 0.5 });
