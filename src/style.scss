@@ -137,10 +137,28 @@ $color-light: #e6dede;    // Off-white
         border-radius: 1.2rem;
         border: none;
         font-size: 24px;
+        box-shadow: 8px 8px 0px rgba(0,0,0,0.1);
 
         pointer-events: auto;
         // Your existing styles will still apply, but you may want a shadow:
         //box-shadow: 8px 8px 0px rgba(43, 53, 44, 0.2);
+
+        // 1. MATCHED SHADOW & TRANSITION
+        box-shadow: 4px 4px 0px rgba(0,0,0,0.1); 
+        transition: all 0.2s ease;
+            
+        // 2. MATCHED HOVER (Lift up slightly)
+        &:hover {
+          transform: translate(-2px, -2px);
+          box-shadow: 6px 6px 0px rgba(0,0,0,0.15);
+          filter: brightness(1.1); 
+        }
+      
+        // 3. ADDED ACTIVE STATE (Press down effect)
+        &:active {
+          transform: translate(2px, 2px); // Moves button down
+          box-shadow: 0px 0px 0px transparent; // Removes shadow to simulate depth loss
+        }
       }
     }
 
@@ -208,18 +226,14 @@ $color-light: #e6dede;    // Off-white
   }
 
   @media (min-width: 768px) {
-    // 1. Keep the scroll HERE (on the parent) so mouse wheel works everywhere
     overflow-y: auto; 
     display: block;
-    // We remove the bottom padding from the parent to prevent layout clamping
     padding: 60px 60px 0 60px; 
 
     .about-mobile { display: none; }
     .about-desktop { display: block; }
 
-    // 2. Wrapper Settings
     .landing-wrapper {
-      // FIX: Remove padding here so the sticky sidebar has a clear path to the bottom
       padding: 0; 
       
       overflow: visible; 
@@ -228,27 +242,22 @@ $color-light: #e6dede;    // Off-white
       align-items: flex-start; 
     }
 
-    // 3. Sidebar Settings
     .landing-sidebar {
       position: sticky;       
       top: 60px;
-      // Height calculation: 100vh - (Top Padding 60px + Bottom Padding 60px)
       height: calc(100vh - 120px);      
       border-right: none;
       align-self: flex-start;
       
-      // Optional: Prevent sidebar itself from scrolling unless content is huge
       overflow-y: hidden; 
     }
 
-    // 4. Main Content Settings
     .landing-main {
       overflow-y: visible; 
       height: auto;        
       border-left: 2px dashed rgba($color-light, 0.3);
       padding-left: 40px;
       
-      // FIX: Add the bottom spacing here instead of on the wrapper
       padding-bottom: 60px; 
     }
   }
