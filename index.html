@@ -113,20 +113,20 @@
             <h2 class="resume-paragraph-header" style="font-size: 1.2rem;">Read more about my projects in the "My Work" tab of the 3D room!</h2>
             <div class="projects-container">
 
-            <a href="https://github.com/lsalgado7/room-portfolio" target="_blank" class="project-card-link">
+              <a href="https://github.com/lsalgado7/RAI" target="_blank" class="project-card-link">
                 <div class="project-vertical-card">
-                  <h3 class="card-title">3D Room Portfolio</h3>
+                  <h3 class="card-title">RAI (An Agentic Research Assistant)</h3>
                   <div class="card-image">
-                    <img src="/images/website.webp" alt="3D Room Project">
+                    <img src="/images/RAI_Example_Run.gif" alt="Agentic Research Assistant">
                     <div class="image-overlay">
                       <span class="overlay-text">View on GitHub ↗</span>
                     </div>
                   </div>
                   <div class="tech-stack">
-                    <span class="tech-bubble">Javascript</span>
-                    <span class="tech-bubble">THREE.js</span>
-                    <span class="tech-bubble">Blender</span>
-                    <span class="tech-bubble">SCSS</span>
+                    <span class="tech-bubble">Python</span>
+                    <span class="tech-bubble">CrewAI</span>
+                    <span class="tech-bubble">Gemini</span>
+                    <span class="tech-bubble">Streamlit</span>
                   </div>
                 </div>
               </a>
@@ -144,6 +144,24 @@
                   <span class="tech-bubble">Data Collection</span>
                 </div>
               </div>
+
+              <a href="https://github.com/lsalgado7/room-portfolio" target="_blank" class="project-card-link">
+                <div class="project-vertical-card">
+                  <h3 class="card-title">3D Room Portfolio</h3>
+                  <div class="card-image">
+                    <img src="/images/website.webp" alt="3D Room Project">
+                    <div class="image-overlay">
+                      <span class="overlay-text">View on GitHub ↗</span>
+                    </div>
+                  </div>
+                  <div class="tech-stack">
+                    <span class="tech-bubble">Javascript</span>
+                    <span class="tech-bubble">THREE.js</span>
+                    <span class="tech-bubble">Blender</span>
+                    <span class="tech-bubble">SCSS</span>
+                  </div>
+                </div>
+              </a>
               
               <a href="https://github.com/bendonaldson/CS410-Project" target="_blank" class="project-card-link">
                 <div class="project-vertical-card">
@@ -219,6 +237,41 @@
         <div class="modal-content">
           <div class="modal-content-wrapper">
             
+            <div class="work-project">
+              <div class="work-project-wrapper">
+                <div class="work-image-wrapper">
+                  <img src="/images/RAI_Example_Run.gif" alt="AI Research Assistant Demo">
+                </div>
+                <div class="paragraph-section">
+                  <h2 class="modal-paragraph-header">Agentic Research Assistant</h2>
+                  <p class="modal-paragraph-text sm-margin-top sm-font">
+                    Tech Skills: Python, CrewAI, Google Gemini, Streamlit, Pydantic<br>
+                    Soft Skills: System Architecture, Prompt Engineering
+                  </p>
+                  <div class="text-clamp-container collapsed">
+                    <p class="modal-paragraph-text">
+                      I developed an autonomous multi-agent system designed to act as a 
+                      "Database Finder" for academic researchers. The system orchestrates 
+                      a crew of specialized AI agents—a Data Scout, Metadata Specialist, 
+                      and Academic Advisor—to find and validate open-source datasets.<br><br>
+
+                      The backend uses <strong>Gemini 2.5 Flash Lite</strong> to remain within 
+                      free-tier API constraints while using <strong>Pydantic</strong> models to 
+                      ensure zero-hallucination in technical metadata. It provides a dual output: 
+                      a structured JSON catalog for data ingestion and a human-readable Markdown 
+                      guide for strategic research advice.<br><br>
+
+                      <strong>Future Plans:</strong> I am currently implementing a "Data Workbench" 
+                      feature that allows users to select datasets from the curated list for 
+                      automated downloading, cleaning, and preliminary EDA (Exploratory Data Analysis) 
+                      directly through the Streamlit UI.
+                    </p>
+                  </div>
+                  <button class="show-more-btn">Show more...</button>
+                </div>
+              </div>
+            </div>
+
             <div class="work-project">
               <div class="work-project-wrapper">
                 <div class="work-image-wrapper">
