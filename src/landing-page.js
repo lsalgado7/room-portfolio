@@ -57,9 +57,9 @@ export function initLoadingScreen() {
         isLoaded = true;
         
         // Update UI to "Ready" state
-        loadingScreenButton.style.border = "8px solid #B6A48C";
-        loadingScreenButton.style.background = "#695D47";
-        loadingScreenButton.style.color = "#e6dede";
+        loadingScreenButton.style.border = "8px solid #2B352C";
+        loadingScreenButton.style.background = "#D3C6B5";
+        loadingScreenButton.style.color = "#2B352C";
         loadingScreenButton.textContent = "Enter!";
         loadingScreenButton.style.cursor = "pointer";
         
