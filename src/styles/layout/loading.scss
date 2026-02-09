@@ -1,0 +1,184 @@
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+.loading-screen {
+  position: fixed;
+  top: -20px; left: -20px;
+  width: calc(100vw + 40px);
+  height: calc(100vh + 40px);
+  z-index: 999999;
+  background-color: v.$color-border;
+  display: flex;
+  overflow-y: auto;
+  box-sizing: border-box; 
+  padding: 50px;
+  border: 8px solid v.$color-accent;
+  border-radius: 48px;
+  margin: 0;
+  overscroll-behavior: none;
+
+  .dynamic-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+    background: radial-gradient(
+      circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+      rgba(#274239, 0.6) 0%,
+      rgba(#3d5844, 1) 100%
+    );
+    transition: background 3s ease;
+  }
+
+  .landing-content {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding-bottom: 150px;
+    font-family: "Maple Mono NF", monospace;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .landing-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 60px;
+    gap: 40px;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      overflow-y: hidden;
+      padding: 30px;
+    }
+  }
+
+  // Sidebar Logic
+  .landing-sidebar {
+    flex: 0 0 250px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 2px dashed rgba(v.$color-light, 0.3);
+    padding: 0 25px;
+    overflow: visible;
+    
+    @media (max-width: 768px) {
+      flex: none;
+      border-right: none;
+      border-bottom: 2px dashed rgba(v.$color-light, 0.3);
+      padding-bottom: 20px;
+      padding-right: 0;
+    }
+  }
+  
+  // NOTE: .snake-button is now in components/_buttons.scss
+  // But we style the specific container here
+  .loading-controls {
+    position: relative;
+    bottom: auto; right: auto;
+    margin-top: auto;
+    padding-top: 20px;
+    align-items: flex-start;
+    width: 100%;
+
+    .instructions {
+      color: v.$color-light;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    // Target the button component here to set width/margin if needed specifically for sidebar
+    .loading-screen-button {
+      width: 100%;
+    }
+  }
+
+  // Profile Image
+  .sidebar-profile-img {
+    width: 75%;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid v.$color-accent;
+    margin-bottom: 20px;
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.1);
+    img { width: 100%; height: 100%; object-fit: cover; }
+
+    @media (max-width: 768px) {
+      width: 80px; height: 80px;
+      margin: 0 auto 15px auto;
+    }
+  }
+
+  .landing-main {
+    flex: 1;
+    height: 100%;
+    max-width: 950px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    
+    &::-webkit-scrollbar { display: none; }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  // Desktop Specific Override
+  @media (min-width: 768px) {
+    overflow-y: auto; 
+    display: block;
+    padding: 60px 60px 0 60px; 
+
+    .landing-wrapper {
+      padding: 0; overflow: visible; height: auto; gap: 0; align-items: flex-start;
+    }
+    .landing-sidebar {
+      position: sticky; top: 60px;
+      height: calc(100vh - 120px); border-right: none;
+      align-self: flex-start; overflow-y: hidden; 
+      .sidebar-resume-box {
+          margin: 20px 0;
+          padding: 15px;
+          background: rgba(v.$color-light, 0.05);
+          border: 1px dashed rgba(v.$color-accent, 0.4);
+          border-radius: 12px;
+          text-align: center;
+
+          .contact-link {
+            margin-top: 10px;
+            display: inline-flex;
+            width: auto;
+          }
+        }
+
+        .sidebar-links {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin-top: 20px;
+          padding-bottom: 40px;
+        }
+    }
+    .landing-main {
+      overflow-y: visible; height: auto;
+      border-left: 2px dashed rgba(v.$color-light, 0.3);
+      padding-left: 40px; padding-bottom: 60px;
+
+      .work-project.slim {
+        background: rgba(v.$color-light, 0.05);
+        border: 1px solid rgba(v.$color-accent, 0.3);
+        padding: 15px;
+        margin-bottom: 15px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar-top {
+    text-align: center;
+  }
+}

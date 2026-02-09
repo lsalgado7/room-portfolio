@@ -1,0 +1,38 @@
+@use '../abstracts/variables' as v;
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; // Prevents main 3D experience from scrolling
+  line-height: 1;
+}
+
+// Global text utilities
+.text-clamp-container {
+  &.collapsed {
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.show-more-btn {
+  background: none;
+  border: none;
+  color: v.$color-border;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 5px;
+  text-decoration: underline;
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.7; }
+}
+
+.is-desktop .desktop-instructions { display: block; }
+.is-mobile .mobile-instructions { display: block; }

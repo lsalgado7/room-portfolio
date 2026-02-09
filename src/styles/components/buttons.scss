@@ -1,0 +1,124 @@
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+@use 'sass:color';
+
+// 1. The Snake Button (Loading Screen)
+.snake-button {
+  font-family: "Maple Mono NF";
+  @include m.centered;
+
+  background-color: #D3C6B5 !important; 
+  color: #2B352C !important;
+  border: 6px solid #2B352C !important;
+  width: 100%;
+  padding: 10px 20px;
+  outline: none;
+  font-size: 24px;
+  border-radius: 1.2rem;
+  cursor: pointer;
+  box-sizing: border-box;
+  position: relative; 
+  overflow: hidden;
+  transition: all 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    span { opacity: 1; }
+  }
+
+  &:active { transform: translateY(0) scale(0.98); }
+
+  // Snake Spans
+  span:not(.btn-text) {
+    position: absolute;
+    display: block;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0.8;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  span:nth-child(1) {
+    top: 0; left: 0; width: 100%; height: 3px;
+    background: linear-gradient(to right, transparent, v.$moss);
+    animation-name: snake-top-flow;
+  }
+  span:nth-child(2) {
+    top: 0; right: 0; width: 3px; height: 100%;
+    background: linear-gradient(to bottom, transparent, v.$moss);
+    animation-name: snake-right-flow; animation-delay: -1s;
+  }
+  span:nth-child(3) {
+    bottom: 0; right: 0; width: 100%; height: 3px;
+    background: linear-gradient(to left, transparent, v.$moss);
+    animation-name: snake-bottom-flow;
+  }
+  span:nth-child(4) {
+    bottom: 0; left: 0; width: 3px; height: 100%;
+    background: linear-gradient(to top, transparent, v.$moss);
+    animation-name: snake-left-flow; animation-delay: -1s;
+  }
+
+  .btn-text {
+    position: relative;
+    z-index: 20;
+    pointer-events: none;
+  }
+}
+
+// 2. Contact Links
+.contact-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 15px;
+  background-color: v.$color-border;
+  color: v.$color-light;
+  border-radius: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+
+  &.email { background-color: v.$coffee; }
+  &.github { background-color: v.$moss; }
+  &.linkedin { background-color: #0077b5; }
+  &.resume { background-color: v.$autumn; }
+
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px rgba(0,0,0,0.15);
+    filter: brightness(1.1);
+  }
+}
+
+// 3. Modal Exit Button
+.modal-exit-button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  background-color: v.$color-border;
+  color: v.$color-light;
+  font-family: inherit;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-top: 2px solid rgba(0,0,0,0.1);
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: color.adjust(v.$color-border, $lightness: 10%);
+  }
+}
+
+.contact-button-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}

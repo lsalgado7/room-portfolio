@@ -1,0 +1,131 @@
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+.projects-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 20px;
+
+  @media (min-width: 900px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.project-card-link {
+  text-decoration: none;
+  display: block;
+  color: inherit;
+  &:hover { text-decoration: none; }
+}
+
+.project-vertical-card {
+  cursor: pointer;
+  background: rgba(v.$color-light, 0.05);
+  border: 1px solid rgba(v.$color-accent, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+
+  // 1. Title
+  .card-title {
+    font-family: "Maple Mono NF", monospace;
+    font-size: 1.3rem;
+    color: v.$color-light;
+    margin-bottom: 15px;
+  }
+
+  // 2. Image Area & Overlay
+  .card-image {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    border: 1px solid rgba(v.$color-light, 0.1);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .image-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(v.$color-text, 0.7);
+      
+      // Flex centering
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      
+      opacity: 0; // Hidden by default
+      transition: opacity 0.3s ease;
+      backdrop-filter: blur(2px);
+    }
+
+    .overlay-text {
+      color: v.$color-light;
+      font-family: "Maple Mono NF", monospace;
+      font-weight: bold;
+      font-size: 0.9rem;
+      border: 1px solid v.$color-light;
+      padding: 6px 12px;
+      border-radius: 4px;
+      
+      // Start slightly pushed down
+      transform: translateY(10px);
+      transition: transform 0.3s ease;
+    }
+  }
+
+  // 3. Tech Stack Bubbles
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 5px;
+  }
+
+  .tech-bubble {
+    font-size: 0.75rem;
+    font-family: "Maple Mono NF", monospace;
+    padding: 4px 12px;
+    background-color: rgba(v.$color-accent, 0.2);
+    color: v.$color-accent;
+    border: 1px solid rgba(v.$color-accent, 0.4);
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  // 4. Hover Effects (MUST BE LAST to override base styles)
+  &:hover {
+    background: rgba(v.$color-light, 0.1);
+    border-color: v.$color-accent;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+    .card-title { 
+      color: v.$color-accent; 
+    }
+
+    .card-image img { 
+      transform: scale(1.1); // Restored the 1.1 scale from original file
+    }
+
+    .image-overlay { 
+      opacity: 1; 
+    }
+
+    .overlay-text { 
+      transform: translateY(0); // Slides up into place
+    }
+  }
+}

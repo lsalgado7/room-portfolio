@@ -1,0 +1,60 @@
+@use '../abstracts/variables' as v;
+
+.skills-container {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  padding: 10px 5px;
+}
+
+.skill-bubble {
+  font-family: "Maple Mono NF", monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  background-color: rgba(v.$color-accent, 0.1);
+  color: v.$base-white;
+  border: 1px solid rgba(v.$color-accent, 0.4);
+  border-radius: 50px; 
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+  cursor: default;
+
+  &:hover {
+    background-color: rgba(v.$color-accent, 0.25);
+    color: v.$base-white;
+    border-color: v.$color-accent;
+    transform: scale(1.15);
+    z-index: 999;           
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  // Color Coding Logic
+  &.prog {
+    background-color: rgba(v.$prog, 0.2);
+    border-color: rgba(v.$prog, 0.4);
+    &:hover { border-color: v.$prog; background-color: rgba(v.$prog, 0.4); }
+  }
+
+  &.data {
+    background-color: rgba(v.$data, 0.15);
+    border-color: rgba(v.$data, 0.4);
+    &:hover { border-color: v.$data; background-color: rgba(v.$data, 0.3); }
+  }
+
+  &.design {
+    background-color: rgba(v.$desn, 0.1);
+    border-color: rgba(v.$desn, 0.3);
+    &:hover { border-color: v.$desn; background-color: rgba(v.$desn, 0.2); }
+  }
+
+  &.tool {
+    background-color: rgba(v.$tool, 0.1);
+    border-color: rgba(v.$tool, 0.3);
+    &:hover { border-color: v.$tool; background-color: rgba(v.$tool, 0.2); }
+  }
+}

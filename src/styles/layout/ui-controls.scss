@@ -1,0 +1,98 @@
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+.ui-controls-wrapper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 999;
+}
+
+.back-home-btn {
+  height: 35px;
+  padding: 0 15px;
+  border-radius: 20px;
+  background-color: v.$prarie-grass;
+  color: v.$wheat;
+  border: 2px solid v.$wheat;
+  font-family: "Maple Mono NF", monospace;
+  font-weight: bold;
+  font-size: 0.8rem;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    background-color: v.$moss;
+  }
+
+  .icon { font-size: 1rem; }
+}
+
+.help-icon-btn {
+  position: fixed;
+  top: 20px;
+  right: 145px;
+  z-index: 999; 
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: v.$prarie-grass;
+  color: v.$wheat;
+  border: 2px solid v.$wheat;
+  font-family: "Maple Mono NF", monospace;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: v.$moss;
+  }
+}
+
+// Tips for 3D space
+.tips-container {
+  position: fixed;
+  top: 75px;
+  right: 20px;
+  z-index: 1000;
+  background: rgba(v.$moss, 0.6); 
+  border: 4px solid v.$sand; 
+  border-radius: 12px;
+  padding: 15px;
+  width: 220px;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.1);
+  pointer-events: auto;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  .tips-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    li { margin-bottom: 4px; }
+  }
+
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translatex(20px);
+  }
+
+  .desktop-instructions, .mobile-instructions {
+    display: none;
+  }
+}

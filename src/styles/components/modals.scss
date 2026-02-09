@@ -1,0 +1,123 @@
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 800px;
+  width: 90%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  display: none;
+  background-color: v.$color-bg;
+  border: 4px solid v.$color-border;
+  border-radius: 20px;
+  color: v.$color-text;
+  box-shadow: 10px 10px 0px rgba(43, 53, 44, 0.2);
+  padding: 0;
+  overflow: hidden;
+  pointer-events: auto;
+
+  @media (max-width: 768px) {
+    width: 95%;
+    max-height: 90dvh;
+  }
+
+  .modal-wrapper {
+    font-family: 'Maple Mono NF', monospace;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 85vh;
+    pointer-events: auto;
+  }
+
+  .modal-title {
+    font-family: 'Maple Mono NF', monospace;
+    text-align: center;
+    font-size: 2rem;
+    padding: 20px;
+    border-bottom: 2px dashed v.$color-border;
+    margin-bottom: 0;
+    background-color: rgba(255,255,255,0.2);
+    font-weight: bold;
+    letter-spacing: 1px;
+    
+    @media (max-width: 768px) { font-size: 1.5rem; }
+  }
+
+  .modal-content {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 30px;
+    display: block;
+    
+    &::-webkit-scrollbar { width: 10px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb {
+      background-color: v.$color-border;
+      border-radius: 5px;
+      border: 2px solid v.$color-bg;
+    }
+  }
+}
+
+// Work Project Specifics
+.work-project {
+  background-color: rgba(255,255,255,0.4);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease;
+
+  &:hover { border-color: v.$color-border; }
+
+  .work-project-wrapper {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    
+    @media (max-width: 768px) { flex-direction: column; }
+  }
+
+  .work-image-wrapper {
+    flex: 0 0 200px;
+    height: 150px;
+    background-color: v.$color-accent;
+    border-radius: 8px;
+    overflow: hidden;
+    @include m.centered;
+    border: 2px solid v.$color-border;
+    
+    img { width: 100%; height: 100%; object-fit: cover; }
+    
+    @media (max-width: 768px) { width: 100%; flex: none; height: 200px; }
+  }
+
+  .paragraph-section { flex: 1; }
+}
+
+// About Specifics
+.about .image-wrapper {
+  float: left;
+  width: 150px;
+  height: 150px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  background-color: v.$color-accent;
+  border-radius: 50%;
+  border: 4px solid v.$color-border;
+  overflow: hidden;
+  shape-outside: circle(50%);
+  
+  img { width: 100%; height: 100%; object-fit: cover; }
+
+  @media (max-width: 768px) {
+    float: none;
+    margin: 0 auto 20px auto;
+    display: block;
+  }
+}

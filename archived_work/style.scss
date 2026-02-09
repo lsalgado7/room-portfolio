@@ -1,3 +1,4 @@
+/*
 // style.scss
 @use "sass:color"; // <--- ADD THIS LINE AT THE TOP
 @use "./styles/fonts.scss";
@@ -77,19 +78,6 @@ $color-light: #e6dede;    // Off-white
 
   .about-desktop { display: none; }
   .about-mobile { display: block; }
-
-  /*
-  @media (min-width: 768px) {
-    overflow-y: hidden;
-    display: block;
-    //padding: 60px; // More breathing room on desktop
-    padding: 60px 60px 0 60px;
-
-    // Toggle About Text visibility
-    .about-mobile { display: none; }
-    .about-desktop { display: block; }
-  }
-    */
 
   .landing-content {
     width: 100%;
@@ -298,8 +286,8 @@ $color-light: #e6dede;    // Off-white
     &::-webkit-scrollbar {
       display: none;
     }
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     
     .landing-section {
       margin-bottom: 40px;
@@ -777,7 +765,6 @@ ul {
   }
 
   .modal-wrapper {
-    /* Ensure the wrapper takes up the full available height of the modal */
     height: 100%; 
     display: flex;
     flex-direction: column;
@@ -1013,3 +1000,4 @@ ul {
     &:hover { border-color: vars.$tool; background-color: rgba(vars.$tool, 0.2); }
   }
 }
+*/
