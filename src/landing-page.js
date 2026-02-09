@@ -5,17 +5,7 @@ import gsap from "gsap";
 export function initLoadingScreen() {
     const loadingScreen = document.querySelector(".loading-screen");
     const loadingScreenButton = document.querySelector(".loading-screen-button");
-    const landingWrapper = document.querySelector(".landing-wrapper");
-    const landingMain = document.querySelector(".landing-main");
-
-    /*
-    // Allows for scrolling on sidebar to still interact with main page
-    landingWrapper.addEventListener("wheel", (e) => {
-        if (e.target.closest(".landing-main")) return;
-        landingMain.scrollTop += e.deltaY;
-    });
-    */
-    // const noSoundButton = document.querySelector(".no-sound-button"); // currently unused
+    const btnText = loadingScreenButton.querySelector(".btn-text")
     
     // Select the instruction texts
     const desktopText = document.querySelector(".desktop-instructions");
@@ -55,21 +45,13 @@ export function initLoadingScreen() {
     // 1. Hook into the Manager from loaders.js
     manager.onLoad = function () {
         isLoaded = true;
-        
-        // Update UI to "Ready" state
-        loadingScreenButton.style.border = "8px solid #2B352C";
-        loadingScreenButton.style.background = "#D3C6B5";
-        loadingScreenButton.style.color = "#2B352C";
-        loadingScreenButton.textContent = "Enter!";
-        loadingScreenButton.style.cursor = "pointer";
-        
-        // Make the secondary button visible if you want audio options later
-        // noSoundButton.style.display = "block"; 
+        loadingScreenButton.classList.add("is-ready"); // Add a class
+        if (btnText) btnText.textContent = "Enter!";
     };
 
     manager.onProgress = function (url, itemsLoaded, itemsTotal) {
         // Optional: Update percentage text
-        loadingScreenButton.textContent = `Loading... ${Math.round((itemsLoaded / itemsTotal) * 100)}%`;
+        btnText.textContent = `Loading... ${Math.round((itemsLoaded / itemsTotal) * 100)}%`;
     };
 
     // 2. Handle Enter Click
@@ -78,11 +60,7 @@ export function initLoadingScreen() {
 
         // Change button style on click
         loadingScreenButton.style.cursor = "default";
-        loadingScreenButton.style.border = "8px solid #2B352C";
-        loadingScreenButton.style.background = "#D3C6B5";
-        loadingScreenButton.style.color = "#2B352C";
-        loadingScreenButton.textContent = "~ Welcome ~";
-        loadingScreen.style.background = "#D3C6B5";
+        if (btnText) btnText.textContent = "~ Welcome ~";
 
         // Play the reveal animation
         playReveal();
@@ -126,12 +104,13 @@ export function initLoadingScreen() {
 export function returnToLanding() {
     const loadingScreen = document.querySelector(".loading-screen");
     const loadingScreenButton = document.querySelector(".loading-screen-button");
+    const btnText = loadingScreenButton.querySelector(".btn-text");
     
     // 1. Reset the button text back to "Enter!"
-    if (loadingScreenButton) {
-        loadingScreenButton.textContent = "Enter!";
+    if (btnText) {
+        btnText.textContent = "Enter!";
     }
-
+    loadingScreenButton.style.cursor = "pointer";
     loadingScreen.style.display = "block";
     
     gsap.to(loadingScreen, {

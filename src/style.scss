@@ -11,11 +11,31 @@ $color-text: #2B352C;     // Dark green
 $color-accent: #B6A48C;   // Sand
 $color-light: #e6dede;    // Off-white
 
-// --- DYNAMIC BACKGROUND ANIMATION ---
+// --- DYNAMIC ANIMATIONS ---
 @keyframes gradientMove {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+@keyframes snake-top-flow {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes snake-right-flow {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes snake-bottom-flow {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes snake-left-flow {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(-100%); }
 }
 
 .loading-screen {
@@ -106,8 +126,9 @@ $color-light: #e6dede;    // Off-white
     flex-direction: column;
     justify-content: space-between;
     border-right: 2px dashed rgba($color-light, 0.3);
-    padding-right: 20px;
-    overflow: hidden;
+    //padding-right: 20px;
+    padding: 0 25px;
+    overflow: visible;
 
     // Anchor the Loading UI to the Bottom Right
     .loading-controls {
@@ -127,37 +148,106 @@ $color-light: #e6dede;    // Off-white
 
       .loading-screen-button {
         font-family: "Maple Mono NF";
-        // If "vars.centered" errors, you can remove the next line:
         @include vars.centered;
-        background-color: transparent;
+
+        background-color: #D3C6B5 !important; 
+        color: #2B352C !important;
+        border: 6px solid #2B352C !important;
+
         width: 100%;
         padding: 10px 20px;
         outline: none;
-        color: $color-light;
-        border-radius: 1.2rem;
-        border: none;
+        
         font-size: 24px;
-        box-shadow: 8px 8px 0px rgba(0,0,0,0.1);
+        border-radius: 1.2rem;
+        cursor: pointer;
+        box-sizing: border-box;
+        position: relative; 
+        overflow: hidden;
+        transition: all 0.2s ease, box-shadow 0.2s ease;
 
-        pointer-events: auto;
-        // Your existing styles will still apply, but you may want a shadow:
-        //box-shadow: 8px 8px 0px rgba(43, 53, 44, 0.2);
+        &.is-ready {
+        cursor: pointer;
+        }
 
-        // 1. MATCHED SHADOW & TRANSITION
-        box-shadow: 4px 4px 0px rgba(0,0,0,0.1); 
-        transition: all 0.2s ease;
-            
-        // 2. MATCHED HOVER (Lift up slightly)
         &:hover {
-          transform: translate(-2px, -2px);
-          box-shadow: 6px 6px 0px rgba(0,0,0,0.15);
-          filter: brightness(1.1); 
+          // Scale up slightly and add a shadow
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+          
+          // Make the snake brighter/more visible on hover
+          span {
+            opacity: 1;
+          }
+        }
+
+        &:active {
+          transform: translateY(0) scale(0.98);
+        }
+
+        // --- SNAKE ANIMATION SPANS ---
+        span:not(.btn-text) {
+          position: absolute;
+          display: block;
+          z-index: 10;
+          pointer-events: none;
+          opacity: 0.8;
+          animation-duration: 2s;
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
+        }
+
+        // TOP SNAKE
+        span:nth-child(1) {
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 3px;
+          background: linear-gradient(to right, transparent, vars.$moss);
+          // Use the new animation
+          animation-name: snake-top-flow;
+          animation-delay: 0s;
         }
       
-        // 3. ADDED ACTIVE STATE (Press down effect)
-        &:active {
-          transform: translate(2px, 2px); // Moves button down
-          box-shadow: 0px 0px 0px transparent; // Removes shadow to simulate depth loss
+        // RIGHT SNAKE
+        span:nth-child(2) {
+          top: 0;     // Change from -100% to 0
+          right: 0;
+          width: 3px;
+          height: 100%;
+          background: linear-gradient(to bottom, transparent, vars.$moss);
+          animation: snake-right-optimized 2s linear infinite;
+          animation-name: snake-right-flow;
+          animation-delay: -1s;
+        }
+      
+        // BOTTOM SNAKE
+        span:nth-child(3) {
+          bottom: 0;
+          right: 0;   // Change from -100% to 0
+          width: 100%;
+          height: 3px;
+          background: linear-gradient(to left, transparent, vars.$moss);
+          animation: snake-bottom-optimized 2s linear infinite;
+          animation-name: snake-bottom-flow;
+          animation-delay: 0s;
+        }
+      
+        // LEFT SNAKE
+        span:nth-child(4) {
+          bottom: 0;  // Change from -100% to 0
+          left: 0;
+          width: 3px;
+          height: 100%;
+          background: linear-gradient(to top, transparent, vars.$moss);
+          animation-name: snake-left-flow;
+          animation-delay: -1s;
+        }
+
+        .btn-text {
+          position: relative;
+          z-index: 20;
+          pointer-events: none;
         }
       }
     }
