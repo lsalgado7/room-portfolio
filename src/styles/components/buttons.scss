@@ -3,13 +3,13 @@
 @use 'sass:color';
 
 // 1. The Snake Button (Loading Screen)
-.snake-button {
+.loading-screen-button {
   font-family: "Maple Mono NF";
   @include m.centered;
 
   background-color: #D3C6B5 !important; 
   color: #2B352C !important;
-  border: 6px solid #2B352C !important;
+  border: 8px solid #2B352C !important;
   width: 100%;
   padding: 10px 20px;
   outline: none;
@@ -42,23 +42,23 @@
   }
 
   span:nth-child(1) {
-    top: 0; left: 0; width: 100%; height: 3px;
-    background: linear-gradient(to right, transparent, v.$moss);
+    top: 0; left: 0; width: 100%; height: 4px;
+    background: linear-gradient(to right, transparent, v.$snake);
     animation-name: snake-top-flow;
   }
   span:nth-child(2) {
-    top: 0; right: 0; width: 3px; height: 100%;
-    background: linear-gradient(to bottom, transparent, v.$moss);
+    top: 0; right: 0; width: 4px; height: 100%;
+    background: linear-gradient(to bottom, transparent, v.$snake);
     animation-name: snake-right-flow; animation-delay: -1s;
   }
   span:nth-child(3) {
-    bottom: 0; right: 0; width: 100%; height: 3px;
-    background: linear-gradient(to left, transparent, v.$moss);
+    bottom: 0; right: 0; width: 100%; height: 4px;
+    background: linear-gradient(to left, transparent, v.$snake);
     animation-name: snake-bottom-flow;
   }
   span:nth-child(4) {
-    bottom: 0; left: 0; width: 3px; height: 100%;
-    background: linear-gradient(to top, transparent, v.$moss);
+    bottom: 0; left: 0; width: 4px; height: 100%;
+    background: linear-gradient(to top, transparent, v.$snake);
     animation-name: snake-left-flow; animation-delay: -1s;
   }
 

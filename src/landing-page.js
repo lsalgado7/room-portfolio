@@ -29,14 +29,6 @@ export function initLoadingScreen() {
         navigator.maxTouchPoints > 0 || 
         navigator.msMaxTouchPoints > 0;
 
-    if (isTouchDevice) {
-        mobileText.style.display = "block";
-        desktopText.style.display = "none";
-    } else {
-        desktopText.style.display = "block";
-        mobileText.style.display = "none";
-    }
-
     document.body.classList.add(isTouchDevice ? 'is-mobile' : 'is-desktop');
 
     // State tracking

@@ -1,5 +1,4 @@
 // main.js
-import './style.scss'
 import * as THREE from 'three';
 import { OrbitControls } from './utils/orbit-controls.js';
 import { initLoadingScreen, returnToLanding } from './landing-page.js';
