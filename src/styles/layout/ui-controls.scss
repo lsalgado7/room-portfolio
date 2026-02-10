@@ -92,7 +92,17 @@
     transform: translatex(20px);
   }
 
+  // Hide both by default
   .desktop-instructions, .mobile-instructions {
     display: none;
+  }
+
+  // Force reveal based on body class
+  @at-root .is-desktop & .desktop-instructions {
+    display: block;
+  }
+
+  @at-root .is-mobile & .mobile-instructions {
+    display: block;
   }
 }
