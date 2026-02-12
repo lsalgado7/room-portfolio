@@ -7,12 +7,12 @@
   width: calc(100vw + 40px);
   height: calc(100vh + 40px);
   z-index: 999999;
-  background-color: v.$color-border;
+  background-color: v.$base-black;
   display: flex;
   overflow-y: auto;
   box-sizing: border-box; 
   padding: 50px;
-  border: 8px solid v.$color-accent;
+  border: 8px solid v.$sand;
   border-radius: 48px;
   margin: 0;
   overscroll-behavior: none;
@@ -24,8 +24,8 @@
     z-index: -1;
     background: radial-gradient(
       circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-      rgba(#274239, 0.6) 0%,
-      rgba(#3d5844, 1) 100%
+      rgba(#222d2a, 0.6) 0%,
+      rgba(#000000, 1) 100%
     );
     transition: background 3s ease;
   }
