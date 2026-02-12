@@ -19,22 +19,6 @@ body {
   }
 }
 
-.show-more-btn {
-  background: none;
-  border: none;
-  color: v.$color-border;
-  font-family: inherit;
-  font-weight: bold;
-  font-size: 0.9rem;
-  cursor: pointer;
-  padding: 0;
-  margin-top: 5px;
-  text-decoration: underline;
-  transition: opacity 0.2s;
-
-  &:hover { opacity: 0.7; }
-}
-
 /* Global visibility utilities */
 .desktop-instructions, 
 .mobile-instructions, 

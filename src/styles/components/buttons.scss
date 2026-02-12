@@ -99,20 +99,39 @@
 
 // 3. Modal Exit Button
 .modal-exit-button {
-  width: 100%;
-  padding: 15px;
-  border: none;
-  background-color: v.$color-border;
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  width: 40px;
+  height: 40px;
+  
+  // Shape & Color
+  border-radius: 50%;
+  background-color: v.$moss; 
   color: v.$color-light;
-  font-family: inherit;
-  font-size: 1.2rem;
+  border: 4px solid v.$color-light;
+  
+  // Font & Layout
+  font-family: 'Maple Mono NF', monospace;
   font-weight: bold;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  // Interaction
   cursor: pointer;
-  border-top: 2px solid rgba(0,0,0,0.1);
-  transition: background 0.2s;
+  z-index: 10000;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 
   &:hover {
-    background-color: color.adjust(v.$color-border, $lightness: 10%);
+    filter: brightness(1.1);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 }
 
@@ -121,4 +140,39 @@
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 15px;
   margin-top: 20px;
+}
+
+.show-more-btn {
+  // Layout & Font
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-family: 'Maple Mono NF', monospace;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  // Colors & Borders
+  background-color: transparent;
+  color: v.$wheat; // Uses your $prarie-grass color
+  border: 2px solid v.$dark;
+  border-radius: 20px; // Pill shape
+  cursor: pointer;
+  
+  // Animation
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0px 2px 0px rgba(0,0,0,0.1);
+
+  &:hover {
+    background-color: v.$powder;
+    color: v.$base-black; // Inverts to your $wheat color
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 0px rgba(0,0,0,0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0px 1px 0px rgba(0,0,0,0.1);
+  }
 }
