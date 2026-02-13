@@ -108,12 +108,12 @@
   // 4. Hover Effects (MUST BE LAST to override base styles)
   &:hover {
     background: rgba(v.$color-light, 0.1);
-    border-color: v.$color-accent;
+    border-color: v.$sand;
     transform: translateY(-5px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 
     .card-title { 
-      color: v.$color-accent; 
+      color: v.$powder; 
     }
 
     .card-image img { 

@@ -10,7 +10,8 @@
   transform: translate(-50%, -50%);
   z-index: 9999;
   display: none;
-  background-color: v.$dark;
+  background: #262c33;
+  background: linear-gradient(45deg, rgb(17, 20, 23) 0%, rgb(45, 60, 52) 68%, rgb(65, 64, 44) 100%);
   border: 4px solid v.$wheat;
   border-radius: 20px;
   color: v.$color-text;
@@ -69,7 +70,7 @@
 
 // Work Project Specifics
 .work-project {
-  background: linear-gradient(45deg, #33493f, #020504);;
+  background-color: v.$dark;
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 30px;

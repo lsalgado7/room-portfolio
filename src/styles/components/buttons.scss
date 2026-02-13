@@ -21,14 +21,6 @@
   overflow: hidden;
   transition: all 0.2s ease, box-shadow 0.2s ease;
 
-  &:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    span { opacity: 1; }
-  }
-
-  &:active { transform: translateY(0) scale(0.98); }
-
   // Snake Spans
   span:not(.btn-text) {
     position: absolute;
@@ -67,6 +59,14 @@
     z-index: 20;
     pointer-events: none;
   }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    span { opacity: 1; }
+  }
+
+  &:active { transform: translateY(0) scale(0.98); }
 }
 
 // 2. Contact Links
@@ -87,8 +87,8 @@
 
   &.email { background-color: v.$coffee; }
   &.github { background-color: v.$moss; }
-  &.linkedin { background-color: #0077b5; }
-  &.resume { background-color: v.$autumn; }
+  &.linkedin { background-color: #1e709b; }
+  &.resume { background-color: #592648; }
 
   &:hover {
     transform: translate(-2px, -2px);
@@ -156,7 +156,7 @@
   // Colors & Borders
   background-color: transparent;
   color: v.$wheat; // Uses your $prarie-grass color
-  border: 2px solid v.$dark;
+  border: 2px solid v.$moss;
   border-radius: 20px; // Pill shape
   cursor: pointer;
   
