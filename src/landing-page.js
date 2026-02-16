@@ -6,10 +6,23 @@ export function initLoadingScreen() {
     const loadingScreen = document.querySelector(".loading-screen");
     const loadingScreenButton = document.querySelector(".loading-screen-button");
     const btnText = loadingScreenButton.querySelector(".btn-text")
+    const toggleBtn = document.getElementById('sidebar-toggle');
+    const linksList = document.getElementById('sidebar-links');
     
     // Select the instruction texts
     const desktopText = document.querySelector(".desktop-instructions");
     const mobileText = document.querySelector(".mobile-instructions");
+
+    if (toggleBtn && linksList) {
+        toggleBtn.addEventListener('click', () => {
+            // 1. Toggle the list visibility
+            linksList.classList.toggle('expanded');
+            
+            // 2. Toggle the button animation state
+            // The CSS in buttons.scss handles the text swap and squeeze
+            toggleBtn.classList.toggle('active');
+        });
+    }
 
     // Track mouse movement to update the radial gradient center
     window.addEventListener("mousemove", (e) => {

@@ -29,7 +29,7 @@
           </div>
 
           <section class="sidebar-about">
-            <h2 class="resume-paragraph-header" style="font-size: 1rem; margin-top: 20px;">Welcome!</h2>
+            <h2 class="resume-paragraph-header" style="font-size: 1rem;">Welcome!</h2>
 
             <div class="about-desktop">
               <p class="resume-paragraph-text sm-font" style="opacity: 0.8; line-height: 1.4;">
@@ -57,11 +57,20 @@
             </button>
           </section>
 
-          <div class="sidebar-links">
-            <a href="mailto:levirsalgado@gmail.com" target="_blank" class="contact-link email" >[Email]</a>
-            <a href="https://github.com/lsalgado7" target="_blank" class="contact-link github">[GitHub]</a>
-            <a href="https://www.linkedin.com/in/lsalgado7/" target="_blank" class="contact-link linkedin">[LinkedIn]</a>
-            <a href="/Levi_Salgado_Resume.pdf" download class="contact-link resume" >[Download Resume]</a>
+          <div class="sidebar-links-wrapper">
+            <button id="sidebar-toggle" class="sidebar-toggle">
+              <span class="bracket">[</span>
+              <span class="label-text">Connect</span>
+              <span class="label-icon">X</span>
+              <span class="bracket">]</span>
+            </button>
+
+            <div class="sidebar-links" id="sidebar-links">
+              <a href="mailto:levirsalgado@gmail.com" target="_blank" class="contact-link email" >[Email]</a>
+              <a href="https://github.com/lsalgado7" target="_blank" class="contact-link github">[GitHub]</a>
+              <a href="https://www.linkedin.com/in/lsalgado7/" target="_blank" class="contact-link linkedin">[LinkedIn]</a>
+              <a href="/Levi_Salgado_Resume.pdf" download class="contact-link resume" >[Download Resume]</a>
+            </div>
           </div>
         </aside>
       
@@ -288,31 +297,6 @@
 
                       I leverage Pandas, Scikit-learn, and Plotly for the analytical engine, providing users with sophisticated visualizations of their digital habits.
                       The entire suite is built with Flet, allowing us to ship the project as a high-performance, cross-platform executable.
-                    </p>
-                  </div>
-                  <button class="show-more-btn">Show more...</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="work-project">
-              <div class="work-project-wrapper">
-                <div class="work-image-wrapper">
-                  <img src="/images/website.webp" alt="Website screenshot">
-                </div>
-                <div class="paragraph-section">
-                  <h2 class="modal-paragraph-header">This Website!</h2>
-                  <p class="modal-paragraph-text sm-margin-top sm-font">
-                    Tech Skills: Javascript, HTML, CSS, THREE.js, Blender<br>
-                    Soft Skills: Prioritization, strategic execution, discipline
-                  </p>
-                  <div class="text-clamp-container collapsed">
-                    <p class="modal-paragraph-text">
-                     I spent a couple months learning Blender to create these custom models (I did everything, except the kitty!)
-                     I really wanted a nice, personalized home to display my skills and show a bit about who I am.<br><br>
-                     CREDITS:<br>
-                     Shoutout to YouTuber Andrew Woan, who I learned a majority of my blender and web dev skills from.<br>
-                     I got the kitty model free from Printables.com and modified it to reduce poly count. Creator: Ochrum (@Ochrum_2044578).
                     </p>
                   </div>
                   <button class="show-more-btn">Show more...</button>

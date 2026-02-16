@@ -61,8 +61,9 @@
     flex: 0 0 250px;
     height: 100%;
     display: flex;
+    align-items: center;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 30px;
     border-right: 2px dashed rgba(v.$color-light, 0.3);
     padding: 0 25px;
     overflow: visible;
@@ -81,14 +82,12 @@
   .loading-controls {
     position: relative;
     bottom: auto; right: auto;
-    margin-top: auto;
-    padding-top: 20px;
     align-items: flex-start;
     width: 100%;
 
     .instructions {
       color: v.$color-light;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       text-align: center;
     }
     
@@ -138,29 +137,59 @@
     .landing-sidebar {
       position: sticky; top: 60px;
       height: calc(100vh - 120px); border-right: none;
-      align-self: flex-start; overflow-y: hidden; 
-      .sidebar-resume-box {
-          margin: 20px 0;
-          padding: 15px;
-          background: rgba(v.$color-light, 0.05);
-          border: 1px dashed rgba(v.$color-accent, 0.4);
-          border-radius: 12px;
-          text-align: center;
+      align-self: flex-start;;
 
-          .contact-link {
-            margin-top: 10px;
-            display: inline-flex;
-            width: auto;
-          }
+      overflow-y: auto; 
+      scrollbar-width: none;  // Firefox
+      &::-webkit-scrollbar { display: none; } // Chrome/Safari
+
+      .sidebar-resume-box {
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(v.$color-light, 0.05);
+        border: 1px dashed rgba(v.$color-accent, 0.4);
+        border-radius: 12px;
+        text-align: center;
+
+        .contact-link {
+          margin-top: 10px;
+          display: inline-flex;
+          width: auto;
         }
+      }
+
+      .sidebar-links-wrapper {
+        margin-top: 20px;
+        padding-bottom: 40px;
 
         .sidebar-links {
-          display: flex;
+          display: none;
           flex-direction: column;
           gap: 10px;
           margin-top: 20px;
-          padding-bottom: 40px;
+
+          &.expanded {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+          }
         }
+
+        @media (max-height: 800px) {
+          .sidebar-toggle {
+            display: flex;
+          }
+
+          .sidebar-links {
+            display: none; // Hide links by default
+            margin-top: 15px;
+            
+            &.expanded {
+              display: flex; // Show when toggled
+              animation: fadeIn 0.3s ease;
+            }
+          }
+        }
+      }
     }
     .landing-main {
       overflow-y: visible; height: auto;

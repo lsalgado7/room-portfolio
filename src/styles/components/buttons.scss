@@ -176,3 +176,88 @@
     box-shadow: 0px 1px 0px rgba(0,0,0,0.1);
   }
 }
+
+// 4. Sidebar Toggle Button (Connect -> X)
+.sidebar-toggle {
+  // Layout & Box Model
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  padding: 12px;
+  margin-bottom: 15px;
+  
+  // Appearance
+  background: rgba(v.$color-light, 0.05);
+  border: 1px dashed rgba(v.$color-accent, 0.4);
+  border-radius: 12px;
+  color: v.$powder;
+  font-family: 'Maple Mono NF', monospace;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  
+  // Animation Props
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  // 1. The Brackets
+  .bracket {
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    color: v.$sand; 
+    font-weight: 800;
+  }
+
+  // 2. The "Connect" Text (Visible by Default)
+  .label-text {
+    display: block;
+    white-space: nowrap;
+    max-width: 100px; // Arbitrary limit for animation
+    padding: 0 10px;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  // 3. The "X" Icon (Hidden by Default)
+  .label-icon {
+    display: block;
+    max-width: 0;
+    opacity: 0;
+    transform: translateY(20px); 
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    color: v.$color-light;
+    overflow: hidden;
+  }
+
+  // --- HOVER STATE ---
+  &:hover {
+    background: rgba(v.$color-light, 0.15);
+    border-color: rgba(v.$powder, 0.8);
+    transform: scale(1.02);
+  }
+
+  // --- ACTIVE STATE (The Squeeze) ---
+  &.active {
+    background: rgba(v.$color-light, 0.2);
+
+    .label-text {
+      max-width: 0;
+      padding: 0;
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+
+    .label-icon {
+      max-width: 30px; // Open up space for X
+      padding: 0 10px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    // Optional: make brackets glow or tighten slightly more
+    .bracket {
+      filter: brightness(1.3);
+    }
+  }
+}
