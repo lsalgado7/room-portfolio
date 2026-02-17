@@ -93,10 +93,11 @@
         // CLOSED STATE
         max-height: 0;
         opacity: 0;
-        margin-top: 0;     // Collapsed margin
-        padding: 0 5px;    // Prevent scroll clipping
+        margin-top: -15;
+        padding: 0 5px;
+        padding-bottom: 40px;
         overflow: hidden;
-        visibility: hidden; // Ensures it's not clickable when closed
+        visibility: hidden;
         
         // TRANSITION: Smooth close
         // We delay 'visibility' change so it stays visible while fading out
@@ -110,7 +111,7 @@
         &.expanded {
           max-height: 500px; // Large enough to fit all content
           opacity: 1;
-          margin-top: 25px;  // Slide down
+          margin-top: 10px;  // Slide down
           visibility: visible;
           
           // Remove delay on open so it appears immediately
@@ -119,14 +120,31 @@
           // STAGGERED ANIMATION FOR BUTTONS
           .contact-link {
             // Start hidden so the animation can reveal them
-            opacity: 0; 
-            animation: slideInUpFade 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
           }
 
-          // Loop through the first 6 items to add delays
-          @for $i from 1 through 6 {
-            .contact-link:nth-child(#{$i}) {
-              animation-delay: #{$i * 0.1}s;
+          &.expanded {
+            max-height: 500px; 
+            opacity: 1;
+            margin-top: 25px; 
+            visibility: visible;
+            transition-delay: 0s;
+
+            // --- BUTTON ANIMATION: OPEN STATE ---
+            .contact-link {
+              opacity: 1;
+              transform: translateY(0);
+              // Slower transition for a nice entrance
+              transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            }
+
+            // Loop through the first 6 items to add delays
+            @for $i from 1 through 6 {
+              .contact-link:nth-child(#{$i}) {
+                transition-delay: #{$i * 0.08}s; 
+              }
             }
           }
         }
@@ -139,7 +157,6 @@
 
         .sidebar-links {
           display: none; // Hide links by default
-          margin-top: 15px;
           
           &.expanded {
             display: flex; // Show when toggled

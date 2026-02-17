@@ -23,14 +23,3 @@
   0% { transform: translateY(100%); }
   100% { transform: translateY(-100%); }
 }
-
-@keyframes slideInUpFade {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
