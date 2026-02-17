@@ -30,13 +30,6 @@ export function setupDesktopViewEvents(camera, controls) {
             exitDesktopView(camera, controls);
         });
     }
-
-    // Optional: Allow 'Escape' key to exit
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && isDesktopViewActive) {
-            exitDesktopView(camera, controls);
-        }
-    });
 }
 
 export function enterDesktopView(camera, controls) {

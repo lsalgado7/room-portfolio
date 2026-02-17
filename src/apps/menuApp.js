@@ -37,6 +37,9 @@ export class MenuApp {
             case 'Enter':
                 this.options[this.selectedIndex].action();
                 break;
+            case 'Escape':
+                this.callbacks.exit();
+                break;
         }
         this.draw();
     }
