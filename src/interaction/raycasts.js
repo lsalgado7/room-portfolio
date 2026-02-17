@@ -1,10 +1,14 @@
 // raycasts.js
 import * as THREE from 'three';
-import { isModalActive } from './modals.js'; 
-import { socialLinks, notClickable, hoverItems } from './mappings.js';
-import { playClickAnimation, playHoverAnimation } from './animations.js';
-import { showModal, modals } from './modals.js';
-import { camera, raycasterObjects } from './main.js';
+// UI
+import { isModalActive, showModal, modals } from '../ui/modals.js';
+// Config
+import { socialLinks, notClickable, hoverItems } from '../config/mappings.js';
+// Utils
+import { playClickAnimation, playHoverAnimation } from '../utils/animations.js';
+// Main (Up one level)
+import { camera, raycasterObjects } from '../main.js';
+// Sibling interaction file
 import { enterDesktopView } from './desktop-view.js';
 
 export const raycaster = new THREE.Raycaster();

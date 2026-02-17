@@ -84,11 +84,12 @@
   letter-spacing: 1px;
   transition: all 0.2s ease;
   box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+  max-width: 300px;
 
   &.email { background-color: v.$coffee; }
-  &.github { background-color: v.$moss; }
+  &.github { background-color: #592648; }
   &.linkedin { background-color: #1e709b; }
-  &.resume { background-color: #592648; }
+  &.resume { background-color: v.$moss; }
 
   &:hover {
     transform: translate(-2px, -2px);

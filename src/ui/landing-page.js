@@ -1,5 +1,5 @@
 // loading-screen.js
-import { manager } from './loaders.js';
+import { manager } from '../world/loaders.js';
 import gsap from "gsap";
 
 export function initLoadingScreen() {

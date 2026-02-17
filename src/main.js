@@ -1,13 +1,17 @@
 // main.js
 import * as THREE from 'three';
+// Utils
 import { OrbitControls } from './utils/orbit-controls.js';
-import { initLoadingScreen, returnToLanding } from './landing-page.js';
-
-// Imported Modules
-import { initModalEvents, isModalActive } from './modals.js';
-import { loadRoomScene, fans} from './loaders.js';
-import { setupRaycasterEvents, updateObjectHover } from './raycasts.js';
-import { setupDesktopViewEvents } from './desktop-view.js';
+// UI
+import { initLoadingScreen, returnToLanding } from './ui/landing-page.js';
+import { initModalEvents, isModalActive } from './ui/modals.js';
+// World
+import { loadRoomScene, fans } from './world/loaders.js';
+// Interaction
+import { setupRaycasterEvents, updateObjectHover } from './interaction/raycasts.js';
+import { setupDesktopViewEvents } from './interaction/desktop-view.js';
+// Systems
+import { computer } from './systems/monitor.js';
 
 const canvas = document.querySelector("#experience-canvas");
 const sizes = {
@@ -115,11 +119,7 @@ const render = () =>{
     fan.rotation.y += 0.05
   })
 
-  console.log(
-    `Position: ${camera.position.x}, ${camera.position.y}, ${camera.position.z} | ` +
-    `Rotation: ${camera.rotation.x}, ${camera.rotation.y}, ${camera.rotation.z} | ` +
-    `Target: ${controls.target.x}, ${controls.target.y}, ${controls.target.z}`
-  );
+  computer.update();
 
   // Do rendering
   renderer.render(scene, camera);

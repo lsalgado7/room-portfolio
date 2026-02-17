@@ -2,9 +2,12 @@
 import * as THREE from 'three';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { textureMap, notClickable } from './mappings.js';
+// Go up to config
+import { textureMap, notClickable } from '../config/mappings.js';
+// Sibling file in same folder
 import { createVideoMaterial, initMaterials, glassMaterial } from './materials.js';
-import { raycasterObjects } from './main.js';
+// Go up to main
+import { raycasterObjects } from '../main.js';
 
 export const manager = new THREE.LoadingManager();
 const textureLoader = new THREE.TextureLoader();
@@ -18,6 +21,7 @@ gltfLoader.setDRACOLoader(dracoLoader);
 
 const loadedTextures = {};
 export const fans = [];
+export let screenMesh = null;
 
 // Load and process all textures from the map
 // EX: If obj has 'one' in the name, load its texture from TS_one
@@ -58,6 +62,7 @@ export const loadRoomScene = (scene) => {
         if (child.name.includes("glass")) {
           child.material = glassMaterial;
         } else if (child.name.includes("screen")) {
+          screenMesh = child;
           child.material = screenMaterial;
           setupScreenUVs(child);
         } else {

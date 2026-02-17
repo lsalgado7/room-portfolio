@@ -1,6 +1,6 @@
 // modals.js
-import { showModalAnimation, hideModalAnimation } from './animations.js';
-import { clearCurrentObject } from './raycasts.js';
+import { showModalAnimation, hideModalAnimation } from '../utils/animations.js';
+import { clearCurrentObject } from '../interaction/raycasts.js';
 
 export let isModalActive = false;
 

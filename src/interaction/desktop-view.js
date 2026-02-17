@@ -1,6 +1,8 @@
 // src/desktop-view.js
 import gsap from 'gsap';
 import * as THREE from 'three';
+// Systems
+import { computer } from '../systems/monitor.js';
 
 // State to track if we are currently at the desk
 export let isDesktopViewActive = false;
@@ -90,6 +92,8 @@ export function enterDesktopView(camera, controls) {
         ease: "power2.inOut",
         onUpdate: () => controls.update(), // Important: keep controls synced during tween
         onComplete: () => {
+            computer.mount();
+
             // Show the exit button after animation finishes
             const exitBtn = document.getElementById('exit-desktop-btn');
             if(exitBtn) exitBtn.classList.add('active');
@@ -121,6 +125,8 @@ export function exitDesktopView(camera, controls) {
         ease: "power2.inOut",
         onUpdate: () => controls.update(),
         onComplete: () => {
+            computer.unmount();
+
             // 3. Re-enable controls
             controls.enableRotate = true;
             controls.enableZoom = true;
