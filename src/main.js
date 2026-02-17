@@ -4,7 +4,8 @@ import * as THREE from 'three';
 import { OrbitControls } from './utils/orbit-controls.js';
 // UI
 import { initLoadingScreen, returnToLanding } from './ui/landing-page.js';
-import { initModalEvents, isModalActive } from './ui/modals.js';
+import { initModalEvents } from './ui/modals.js';
+import { EmbedPlayer } from './ui/music-player.js';
 // World
 import { loadRoomScene, fans } from './world/loaders.js';
 // Interaction
@@ -91,6 +92,9 @@ function setupTipsToggle() {
   // Help Icon Click
   helpIcon.addEventListener('click', toggleTips);
 }
+
+// Initialize Music Player
+const musicPlayer = new EmbedPlayer();
 
 function setupNavigation() {
     const backBtn = document.getElementById('back-to-landing');

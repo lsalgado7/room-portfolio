@@ -1,0 +1,110 @@
+@use '../abstracts/variables' as v;
+
+.music-player-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 998; // Below modals (usually 1000+), above canvas
+    
+    // Match Tips Box Style
+    background: rgba(v.$moss, 0.6);
+    border: 4px solid v.$sand;
+    border-radius: 12px;
+    padding: 15px;
+    
+    width: 350px; 
+    max-width: 85vw;
+
+    // Sliding Transition
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateX(0); // Open state
+
+    &.collapsed {
+        // Slide completely off to the left, plus the 20px margin
+        transform: translateX(calc(-100% - 20px));
+    }
+
+    // --- The "Tab" Button ---
+    .music-toggle-tab {
+        position: absolute;
+        top: 20px;      // Aligned near top of box
+        right: -45px;   // Stick out to the right
+        
+        width: 40px;
+        height: 40px;
+        border-radius: 0 8px 8px 0; // Rounded on right side only
+        
+        background-color: v.$moss;
+        border: 2px solid v.$wheat;
+        border-left: none; // Connect seamlessly to box
+        color: v.$powder;
+        
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        transition: background-color 0.2s;
+
+        &:hover {
+            filter: brightness(1.1);
+        }
+    }
+
+    // --- Content Styling ---
+    .music-content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .music-header {
+        // Reusing your header styles
+        font-family: "Maple Mono NF", monospace;
+        font-weight: bold;
+        font-size: 1rem;
+        color: v.$powder; // Assuming powder is light text
+        text-align: center;
+        margin: 0;
+        text-shadow: 1px 1px 0px v.$moss;
+    }
+
+    .iframe-box {
+        width: 100%;
+        height: 42px;
+        background: rgba(0,0,0,0.2);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .music-controls {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+
+        button {
+            background: v.$moss;
+            border: 2px solid v.$wheat;
+            color: v.$powder;
+            font-family: "Maple Mono NF", monospace;
+            font-weight: bold;
+            cursor: pointer;
+            
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            
+            transition: transform 0.1s ease;
+
+            &:hover {
+                transform: scale(1.1);
+                filter: brightness(1.1);
+            }
+            
+            &:active {
+                transform: scale(0.95);
+            }
+        }
+    }
+}
