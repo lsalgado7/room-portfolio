@@ -7,7 +7,7 @@ import { initLoadingScreen, returnToLanding } from './ui/landing-page.js';
 import { initModalEvents } from './ui/modals.js';
 import { EmbedPlayer } from './ui/music-player.js';
 // World
-import { loadRoomScene, fans } from './world/loaders.js';
+import { loadRoomScene, fans, interactSign } from './world/loaders.js';
 // Interaction
 import { setupRaycasterEvents, updateObjectHover } from './interaction/raycasts.js';
 import { setupDesktopViewEvents } from './interaction/desktop-view.js';
@@ -116,14 +116,20 @@ const render = () =>{
   // Update controls
   controls.update();
 
+  // update computer for interactions
+  computer.update();
+
   // Updates object hover state
   updateObjectHover();
   
+  // Animations
   fans.forEach(fan => {
     fan.rotation.y += 0.05
   })
-
-  computer.update();
+  if (interactSign && interactSign.visible) {
+    // Moves up and down using a sine wave
+    interactSign.position.y += Math.sin(Date.now() / 500) * 0.001; 
+  }
 
   // Do rendering
   renderer.render(scene, camera);

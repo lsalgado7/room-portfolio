@@ -22,6 +22,7 @@ gltfLoader.setDRACOLoader(dracoLoader);
 const loadedTextures = {};
 export const fans = [];
 export let screenMesh = null;
+export let interactSign = null;
 
 // Load and process all textures from the map
 // EX: If obj has 'one' in the name, load its texture from TS_one
@@ -45,9 +46,12 @@ export const loadRoomScene = (scene) => {
   gltfLoader.load("/models/Room_Portfolio.glb", (glb) => {
     glb.scene.traverse(child => {
       if (child.isMesh) {
-        // make the desktop hitbox invisible
+        // make the desktop hitbox invisible and setup sign
         if (child.name.includes('click_desktop')) {
           child.material.visible = false;
+
+          interactSign = createInteractLabel(child.position);
+          scene.add(interactSign);
         }
 
         // get interactable objects, save them to a list & save initial spacial data
@@ -102,4 +106,53 @@ function applyTextures(child) {
       if (child.name.includes('fan')) fans.push(child);
     }
   });
+}
+
+// Helper function to create the texture and sprite for interact sign
+function createInteractLabel(position) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  canvas.width = 512;
+  canvas.height = 256;
+
+  // 1. Draw Background (Rounded Rect style)
+  context.fillStyle = 'rgba(0, 0, 0, 0.3)'; // Semi-transparent black
+  context.beginPath();
+  context.roundRect(10, 10, 492, 236, 40); // Requires modern browser, or use fillRect
+  context.fill();
+
+  // 2. Draw Border
+  context.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+  context.lineWidth = 8;
+  context.stroke();
+
+  // 3. Draw Text
+  context.font = 'bold 80px Arial';
+  context.fillStyle = 'white';
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillText('Interact', 256, 128);
+
+  // 4. Create Sprite
+  const texture = new THREE.CanvasTexture(canvas);
+  // minFilter Linear fixes text shimmering
+  texture.minFilter = THREE.LinearFilter; 
+  
+  const material = new THREE.SpriteMaterial({ 
+    map: texture, 
+    transparent: true,
+    depthTest: false, // Optional: makes it visible through objects if you want
+    depthWrite: false
+  });
+  
+  const sprite = new THREE.Sprite(material);
+  // Copy position of the desktop hitbox
+  sprite.position.copy(position);
+  // Reposition it
+  sprite.position.x += 1;
+  sprite.position.z -= 1.35; 
+  // Scale it (aspect ratio of canvas is 2:1)
+  sprite.scale.set(1.5, 0.75, 1); 
+
+  return sprite;
 }

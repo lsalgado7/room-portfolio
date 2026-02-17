@@ -3,6 +3,8 @@ import gsap from 'gsap';
 import * as THREE from 'three';
 // Systems
 import { computer } from '../systems/monitor.js';
+// World
+import { interactSign } from '../world/loaders.js';
 
 // State to track if we are currently at the desk
 export let isDesktopViewActive = false;
@@ -13,10 +15,6 @@ let originalTarget = new THREE.Vector3();
 
 // Store original constraints
 let savedConstraints = {};
-
-//Position: -1.2416436778860407, 5.9246796151950765, -2.913753351614945 |
-//Rotation: -2.955586009837653, 1.3322675125434146e-16, 3.141592653589793 |
-//Target: -1.2416436778860414, 5, 2
 
 // Configuration for where the camera should go (YOU WILL NEED TO TUNE THESE VALUES)
 const DESKTOP_CAMERA_POS = new THREE.Vector3(-1.24164, 6.42467, -1.91375); // Example: slightly in front of screen
@@ -34,6 +32,9 @@ export function setupDesktopViewEvents(camera, controls) {
 
 export function enterDesktopView(camera, controls) {
     if (isDesktopViewActive) return;
+
+    // Hide sign on enter
+    if (interactSign) interactSign.visible = false;
 
     // 1. Save current state
     originalPosition.copy(camera.position);
@@ -119,6 +120,9 @@ export function exitDesktopView(camera, controls) {
         onUpdate: () => controls.update(),
         onComplete: () => {
             computer.unmount();
+
+            // Reveal sign on exit
+            if (interactSign) interactSign.visible = true;
 
             // 3. Re-enable controls
             controls.enableRotate = true;
