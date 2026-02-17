@@ -75,6 +75,79 @@
       padding-bottom: 20px;
       padding-right: 0;
     }
+
+    .sidebar-links-wrapper {
+      //margin-top: 20px;
+      //padding-bottom: 40px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .sidebar-links {
+        // LAYOUT: Always flex, but hidden by default
+        display: flex;
+        flex-direction: column;
+        gap: 15px; 
+        
+        // CLOSED STATE
+        max-height: 0;
+        opacity: 0;
+        margin-top: 0;     // Collapsed margin
+        padding: 0 5px;    // Prevent scroll clipping
+        overflow: hidden;
+        visibility: hidden; // Ensures it's not clickable when closed
+        
+        // TRANSITION: Smooth close
+        // We delay 'visibility' change so it stays visible while fading out
+        transition: 
+          max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+          opacity 0.4s ease,
+          margin-top 0.4s ease,
+          visibility 0s linear 0.4s; 
+
+        // OPEN STATE
+        &.expanded {
+          max-height: 500px; // Large enough to fit all content
+          opacity: 1;
+          margin-top: 25px;  // Slide down
+          visibility: visible;
+          
+          // Remove delay on open so it appears immediately
+          transition-delay: 0s;
+
+          // STAGGERED ANIMATION FOR BUTTONS
+          .contact-link {
+            // Start hidden so the animation can reveal them
+            opacity: 0; 
+            animation: slideInUpFade 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+          }
+
+          // Loop through the first 6 items to add delays
+          @for $i from 1 through 6 {
+            .contact-link:nth-child(#{$i}) {
+              animation-delay: #{$i * 0.1}s;
+            }
+          }
+        }
+      }
+
+      @media (max-height: 800px) {
+        .sidebar-toggle {
+          display: flex;
+        }
+
+        .sidebar-links {
+          display: none; // Hide links by default
+          margin-top: 15px;
+          
+          &.expanded {
+            display: flex; // Show when toggled
+            animation: fadeIn 0.3s ease;
+          }
+        }
+      }
+    }
   }
   
   // NOTE: .snake-button is now in components/_buttons.scss
@@ -155,39 +228,6 @@
           margin-top: 10px;
           display: inline-flex;
           width: auto;
-        }
-      }
-
-      .sidebar-links-wrapper {
-        margin-top: 20px;
-        padding-bottom: 40px;
-
-        .sidebar-links {
-          display: none;
-          flex-direction: column;
-          gap: 10px;
-          margin-top: 20px;
-
-          &.expanded {
-            display: flex;
-            animation: fadeIn 0.3s ease;
-          }
-        }
-
-        @media (max-height: 800px) {
-          .sidebar-toggle {
-            display: flex;
-          }
-
-          .sidebar-links {
-            display: none; // Hide links by default
-            margin-top: 15px;
-            
-            &.expanded {
-              display: flex; // Show when toggled
-              animation: fadeIn 0.3s ease;
-            }
-          }
         }
       }
     }

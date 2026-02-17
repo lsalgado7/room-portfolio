@@ -180,6 +180,7 @@
 // 4. Sidebar Toggle Button (Connect -> X)
 .sidebar-toggle {
   // Layout & Box Model
+  position:relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -188,8 +189,8 @@
   margin-bottom: 15px;
   
   // Appearance
-  background: rgba(v.$color-light, 0.05);
-  border: 1px dashed rgba(v.$color-accent, 0.4);
+  background: rgba(v.$moss, 0.75);
+  border: 2px solid rgba(v.$powder, 0.4);
   border-radius: 12px;
   color: v.$powder;
   font-family: 'Maple Mono NF', monospace;
@@ -212,50 +213,73 @@
   .label-text {
     display: block;
     white-space: nowrap;
-    max-width: 100px; // Arbitrary limit for animation
-    padding: 0 10px;
+    
+    // Default State (Expanded)
+    max-width: 100px;
     opacity: 1;
     transform: translateY(0);
-    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    padding: 0 10px;
+    text-align: center; 
+    
+    // --- TRANSITION: CLOSING (X -> Connect) ---
+    // 1. Max-width expands immediately (brackets move out)
+    // 2. Text waits (delay) then fades in
+    transition: 
+      max-width 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0s,   /* Step 1 */
+      opacity 0.3s ease 0.3s,                            /* Step 2 */
+      transform 0.3s ease 0.3s;                          /* Step 2 */
   }
 
   // 3. The "X" Icon (Hidden by Default)
   .label-icon {
-    display: block;
-    max-width: 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) translateY(20px); 
     opacity: 0;
-    transform: translateY(20px); 
-    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     color: v.$color-light;
-    overflow: hidden;
+    
+    // --- TRANSITION: CLOSING (X -> Connect) ---
+    // Icon fades out immediately so brackets can expand clean
+    transition: 
+      opacity 0.2s ease 0s,
+      transform 0.2s ease 0s;
   }
 
   // --- HOVER STATE ---
   &:hover {
-    background: rgba(v.$color-light, 0.15);
+    filter: brightness(1.05);
     border-color: rgba(v.$powder, 0.8);
-    transform: scale(1.02);
   }
 
   // --- ACTIVE STATE (The Squeeze) ---
   &.active {
-    background: rgba(v.$color-light, 0.2);
 
     .label-text {
-      max-width: 0;
-      padding: 0;
+      max-width: 0px; 
       opacity: 0;
       transform: translateY(-20px);
+      
+      // --- TRANSITION: OPENING (Connect -> X) ---
+      // 1. Text fades out immediately
+      // 2. Max-width shrinks after delay (brackets move in)
+      transition: 
+        opacity 0.2s ease 0s,                            /* Step 1 */
+        transform 0.2s ease 0s,                          /* Step 1 */
+        max-width 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.2s; /* Step 2 */
     }
 
     .label-icon {
-      max-width: 30px; // Open up space for X
-      padding: 0 10px;
       opacity: 1;
-      transform: translateY(0);
+      transform: translate(-50%, -50%) translateY(0);
+
+      // --- TRANSITION: OPENING (Connect -> X) ---
+      // Icon waits for the squeeze to mostly finish, then pops in
+      transition: 
+        opacity 0.3s ease 0.4s,
+        transform 0.3s ease 0.4s;
     }
     
-    // Optional: make brackets glow or tighten slightly more
     .bracket {
       filter: brightness(1.3);
     }
