@@ -7,7 +7,7 @@
   font-family: "Maple Mono NF";
   @include m.centered;
 
-  background-color: #D3C6B5 !important; 
+  background-color: v.$powder !important; 
   color: #2B352C !important;
   border: 8px solid #2B352C !important;
   width: 100%;
