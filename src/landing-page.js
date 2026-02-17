@@ -83,11 +83,13 @@ export function initLoadingScreen() {
         const tl = gsap.timeline();
         
         // Fade out everything inside the wrapper
+        /*
         tl.to(".landing-wrapper", {
             opacity: 0,
             y: -20,
             duration: 0.5
         });
+        */
     
         // Existing "shrink and drop" effect
         tl.to(".loading-screen", {

@@ -19,15 +19,40 @@
 
   .dynamic-bg {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: -5%; 
+    left: -5%;
+    width: 110%; 
+    height: 110%;
     z-index: -1;
-    background: radial-gradient(
-      circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-      rgba(#222d2a, 0.6) 0%,
-      rgba(#000000, 1) 100%
+
+    background-color: #151515; 
+    
+    background-image: 
+      /* 1. Reference the external file */
+      url('/public/images/noise.svg'), 
+      
+      /* 2. Your Gradient */
+      linear-gradient(
+        135deg, 
+        rgba(127, 127, 127, 0.25) 0%,    
+        #222222 100%                 
+      );
+
+    background-repeat: repeat, no-repeat;
+    background-size: 150px 150px, cover; 
+    
+    /* Soft-light usually blends external noise files best with dark backgrounds */
+    background-blend-mode: normal; 
+
+    /* Movement Logic */
+    transform: translate(
+      calc((var(--mouse-x, 50%) - 50%) * -0.05),
+      calc((var(--mouse-y, 50%) - 50%) * -0.05)
     );
-    transition: background 3s ease;
+
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+    pointer-events: none;
   }
 
   .landing-content {

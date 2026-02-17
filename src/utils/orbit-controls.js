@@ -39,9 +39,6 @@ const _ray = new Ray();
 const _plane = new Plane();
 const _TILT_LIMIT = Math.cos( 70 * MathUtils.DEG2RAD );
 
-const minPan = new Vector3(-2, 1, -2);
-const maxPan = new Vector3(2, 5, 2);
-
 const _v = new Vector3();
 const _twoPI = 2 * Math.PI;
 
@@ -101,6 +98,9 @@ class OrbitControls extends Controls {
 		super( object, domElement );
 
 		this.state = _STATE.NONE;
+
+		this.minPan = new Vector3(-2, 1, -2);
+		this.maxPan = new Vector3(2, 5, 2);
 
 		/**
 		 * The focus point of the controls, the `object` orbits around this.
@@ -669,7 +669,7 @@ class OrbitControls extends Controls {
 			this.target.add( this._panOffset );
 
 		}
-		this.target.clamp(minPan, maxPan);
+		this.target.clamp(this.minPan, this.maxPan);
 
 		// Limit the target distance from the cursor to create a sphere around the center of interest
 		this.target.sub( this.cursor );

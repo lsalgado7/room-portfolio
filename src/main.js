@@ -6,7 +6,8 @@ import { initLoadingScreen, returnToLanding } from './landing-page.js';
 // Imported Modules
 import { initModalEvents, isModalActive } from './modals.js';
 import { loadRoomScene, fans} from './loaders.js';
-import { raycaster, pointer, setupRaycasterEvents, updateObjectHover } from './raycasts.js';
+import { setupRaycasterEvents, updateObjectHover } from './raycasts.js';
+import { setupDesktopViewEvents } from './desktop-view.js';
 
 const canvas = document.querySelector("#experience-canvas");
 const sizes = {
@@ -50,6 +51,7 @@ controls.target.set(0.5127399372523783, 4.046808560932034, -0.1731077747794347);
 // Init DOM events
 setupRaycasterEvents(canvas, controls);
 initModalEvents(controls);
+setupDesktopViewEvents(camera, controls);
 
 // Load Models
 loadRoomScene(scene);
@@ -112,6 +114,12 @@ const render = () =>{
   fans.forEach(fan => {
     fan.rotation.y += 0.05
   })
+
+  console.log(
+    `Position: ${camera.position.x}, ${camera.position.y}, ${camera.position.z} | ` +
+    `Rotation: ${camera.rotation.x}, ${camera.rotation.y}, ${camera.rotation.z} | ` +
+    `Target: ${controls.target.x}, ${controls.target.y}, ${controls.target.z}`
+  );
 
   // Do rendering
   renderer.render(scene, camera);

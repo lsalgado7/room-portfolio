@@ -28,7 +28,7 @@
     background-color: rgba(v.$color-accent, 0.25);
     color: v.$base-white;
     border-color: v.$color-accent;
-    transform: scale(1.15);
+    transform: scale(0.95) translateY(-2px);
     z-index: 999;           
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }

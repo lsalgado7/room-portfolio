@@ -1,0 +1,27 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <filter id="noiseFilter">
+    <feTurbulence 
+      type="fractalNoise" 
+      baseFrequency="0.8" 
+      numOctaves="3" 
+      stitchTiles="stitch" 
+      result="fineNoise" />
+    
+    <feTurbulence 
+      type="fractalNoise" 
+      baseFrequency="0.01" 
+      numOctaves="5" 
+      stitchTiles="noStitch" 
+      result="coarseNoise" />
+
+    <feBlend in="fineNoise" in2="coarseNoise" mode="overlay" result="mixedNoise"/>
+
+    <feColorMatrix type="luminanceToAlpha" in="mixedNoise" result="alphaMap" />
+      
+    <feFlood flood-color="#383838ff" flood-opacity="0.6" result="color"/>
+    
+    <feComposite operator="in" in="color" in2="alphaMap" />
+  </filter>
+  
+  <rect width="100%" height="100%" filter="url(#noiseFilter)" />
+</svg>

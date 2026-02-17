@@ -5,6 +5,7 @@ import { socialLinks, notClickable, hoverItems } from './mappings.js';
 import { playClickAnimation, playHoverAnimation } from './animations.js';
 import { showModal, modals } from './modals.js';
 import { camera, raycasterObjects } from './main.js';
+import { enterDesktopView } from './desktop-view.js';
 
 export const raycaster = new THREE.Raycaster();
 export const pointer = new THREE.Vector2();
@@ -56,7 +57,7 @@ export function updateObjectHover() {
 
   currentObject = object;
 
-  if (object.name.includes("click") && !object.name.includes("desktop")) {
+  if (object.name.includes("click")) {
     if (object !== prevObject) {
       if (prevObject) {
         playHoverAnimation(prevObject, false);
@@ -117,6 +118,16 @@ function handleRaycasterInteraction(object, controls) {
     showModal(modals.about, controls);
   } else if (object.name.includes('click_contact')) {
     showModal(modals.contact, controls);
+  }
+
+  // Desktop Click Logic
+  if (object.name.includes('click_desktop')) {
+      // Check if we are on a desktop screen width (e.g., > 1024px)
+      enterDesktopView(camera, controls); 
+      return; // Stop processing other click animations if needed
+      if (window.innerWidth > 1024) { 
+          
+      }
   }
 
   // Click Animations
