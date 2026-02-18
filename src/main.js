@@ -111,13 +111,20 @@ setupNavigation();
 // Call this in your main initialization
 setupTipsToggle();
 
+// --- TIME SETUP ---
+const clock = new THREE.Clock();
+
 // Render Loop
 const render = () =>{
+  // Calculate Delta Time (in seconds)
+  const deltaTimeSeconds = clock.getDelta();
+  
   // Update controls
   controls.update();
 
   // update computer for interactions
-  computer.update();
+  // Pass milliseconds (seconds * 1000) because TetrisApp uses 1000ms intervals
+  computer.update(deltaTimeSeconds * 1000);
 
   // Updates object hover state
   updateObjectHover();
@@ -137,7 +144,6 @@ const render = () =>{
 }
 
 render();
-
 
 /*
   Used to get camera starting camera position

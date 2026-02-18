@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { screenMesh } from '../world/loaders.js';
 import { SnakeApp } from '../apps/snakeApp.js';
 import { MenuApp } from '../apps/menuApp.js';
+import { TetrisApp } from '../apps/tetrisApp.js';
 
 export class Monitor {
     constructor() {
@@ -29,7 +30,8 @@ export class Monitor {
         // This maps string names to Classes
         this.apps = {
             'menu': MenuApp,
-            'snake': SnakeApp
+            'snake': SnakeApp,
+            'tetris': TetrisApp
         };
 
         // --- SYSTEM CALLBACKS ---

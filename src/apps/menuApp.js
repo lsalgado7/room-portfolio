@@ -6,6 +6,7 @@ export class MenuApp {
         
         this.options = [
             { label: "Play Snake", action: () => this.callbacks.launch('snake') },
+            { label: "Play Tetris", action: () => this.callbacks.launch('tetris')},
             { label: "Shut Down", action: () => this.callbacks.exit() }
         ];
         this.selectedIndex = 0;
