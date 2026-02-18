@@ -331,7 +331,7 @@ export class SnakeApp {
 
             // Show Leaderboard on Game Over too
             this.ctx.restore(); // Restore to global coordinates for leaderboard
-            this.drawLeaderboard(this.canvas.width / 2, this.offsetY + 200);
+            this.drawLeaderboard(this.canvas.width / 2, this.gameHeight - 40);
             return;
         }
 
