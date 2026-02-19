@@ -280,6 +280,12 @@ export class TetrisApp {
     }
 
     update(deltaTime) {
+        // Draw during NAME_ENTRY
+        if (this.gameState === 'START') {
+            this.draw();
+            return;
+        }
+
         if (this.gameState !== 'PLAYING') return;
 
         this.dropCounter += deltaTime;
@@ -362,11 +368,11 @@ export class TetrisApp {
 
         // Right Side: Score & Name
         this.ctx.textAlign = "left"; 
-        this.ctx.fillText(`SCORE`, this.offsetX + this.gameWidth + 40, centerY - 40);
-        this.ctx.fillText(`${this.score}`, this.offsetX + this.gameWidth + 40, centerY);
+        this.ctx.fillText(`SCORE: ${this.score}`, this.offsetX + this.gameWidth + 40, centerY);
         this.ctx.font = "30px monospace";
         this.ctx.fillStyle = "#AAAAAA";
-        this.ctx.fillText(`PLAYER: ${this.playerName}`, this.offsetX + this.gameWidth + 40, centerY + 60);
+        this.ctx.textAlign = "center"; 
+        this.ctx.fillText(`PLAYER: ${this.playerName}`, this.canvas.width / 2, this.offsetY + this.gameHeight + 60);
         
         // Left Side: Level
         this.ctx.fillStyle = "#FFFFFF";
