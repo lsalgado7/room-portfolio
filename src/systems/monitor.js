@@ -8,8 +8,8 @@ export class Monitor {
     constructor() {
         // SETUP CANVAS
         this.canvas = document.createElement('canvas');
-        this.canvas.width = 1024; 
-        this.canvas.height = 1024;
+        this.canvas.width = 1920; 
+        this.canvas.height = 1080;
         this.ctx = this.canvas.getContext('2d');
 
         // SETUP TEXTURE
