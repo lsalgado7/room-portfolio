@@ -4,25 +4,29 @@ export class SnakeApp {
         this.ctx = ctx;
         this.callbacks = callbacks;
         
-        this.gridSize = 32; 
-        this.speed = 90; 
+        // --- CONFIGURATION ---
+        this.gridSize = 50;
+        this.speed = 80;
         this.lastMove = 0;
         
-        // --- LAYOUT CONFIGURATION ---
-        this.cols = 28; 
-        this.rows = 24; 
+        // --- LAYOUT ---
+        // 20cols * 50px = 1000px width
+        // 15rows * 50px = 750px height
+        this.cols = 20; 
+        this.rows = 15; 
 
         this.gameWidth = this.cols * this.gridSize;
         this.gameHeight = this.rows * this.gridSize;
         
+        // Center the game
         this.offsetX = (this.canvas.width - this.gameWidth) / 2; 
-        this.offsetY = 200; 
+        this.offsetY = 200; // Leaves space for Title/Score at top
         
         // --- GAME STATE & LEADERBOARD ---
         this.gameState = 'NAME_ENTRY'; // Options: NAME_ENTRY, PLAYING, GAME_OVER
         this.playerName = "";
         this.maxNameLength = 10;
-        this.leaderboard = this.loadLeaderboard(); // Load from LocalStorage
+        this.leaderboard = this.loadLeaderboard(); 
 
         this.inputQueue = [];
         this.handleInput = this.handleInput.bind(this);
@@ -66,9 +70,7 @@ export class SnakeApp {
         };
 
         this.leaderboard.push(entry);
-        // Sort by score (High to Low)
         this.leaderboard.sort((a, b) => b.score - a.score);
-        // Keep top 5
         this.leaderboard = this.leaderboard.slice(0, 5);
         
         localStorage.setItem('snake_leaderboard', JSON.stringify(this.leaderboard));
@@ -94,9 +96,7 @@ export class SnakeApp {
                 this.draw();
                 return;
             }
-            // Allow only single letters/numbers
             if (e.key.length === 1 && this.playerName.length < this.maxNameLength) {
-                // Regex to allow letters and numbers only
                 if (/[a-zA-Z0-9 ]/.test(e.key)) {
                     this.playerName += e.key.toUpperCase();
                     this.draw();
@@ -107,16 +107,14 @@ export class SnakeApp {
 
         // --- STATE: GAME OVER ---
         if (this.gameState === 'GAME_OVER' && e.key === 'Enter') {
-            // Restart goes back to game, keeping same name
             this.resetGameVariables();
             this.gameState = 'PLAYING';
             this.draw();
             return;
         }
 
-        // --- STATE: PLAYING (Snake Movement) ---
+        // --- STATE: PLAYING ---
         if (this.gameState === 'PLAYING') {
-            // Prevent scrolling
             if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.key) > -1) {
                 e.preventDefault();
             }
@@ -168,13 +166,11 @@ export class SnakeApp {
     }
 
     update(deltaTime) {
-        // Draw during NAME_ENTRY
         if (this.gameState === 'NAME_ENTRY') {
             this.draw();
             return;
         }
 
-        // Stop game logic if game over
         if (this.gameState !== 'PLAYING') return;
 
         const now = performance.now();
@@ -221,7 +217,7 @@ export class SnakeApp {
     triggerGameOver() {
         this.gameOver = true;
         this.gameState = 'GAME_OVER';
-        this.saveScore(); // <--- Save score on death
+        this.saveScore(); 
         this.draw();
     }
 
@@ -250,34 +246,29 @@ export class SnakeApp {
         const cx = this.canvas.width / 2;
         const cy = this.canvas.height / 2;
 
-        // Prompt
         this.ctx.fillStyle = "#FFFFFF";
         this.ctx.font = "40px monospace";
         this.ctx.fillText("ENTER PLAYER NAME", cx, cy - 80);
 
-        // The Input Box
         this.ctx.fillStyle = "#000000";
         this.ctx.strokeStyle = "#00FF00";
         this.ctx.lineWidth = 4;
         this.ctx.fillRect(cx - 200, cy - 40, 400, 80);
         this.ctx.strokeRect(cx - 200, cy - 40, 400, 80);
 
-        // The Typed Name
         this.ctx.fillStyle = "#00FF00";
         this.ctx.font = "bold 50px monospace";
         this.ctx.fillText(this.playerName + (Math.floor(Date.now() / 500) % 2 ? "_" : " "), cx, cy + 5);
 
-        // Instructions
         this.ctx.fillStyle = "#AAAAAA";
         this.ctx.font = "30px monospace";
         this.ctx.fillText("Press [ENTER] to Start", cx, cy + 100);
 
-        // Draw Leaderboard Preview
         this.drawLeaderboard(cx, cy + 200);
     }
 
     drawGameInterface() {
-        // Score
+        // Score & Player
         this.ctx.fillStyle = "#00FF00";
         this.ctx.font = "bold 40px monospace";
         this.ctx.textAlign = "right";
@@ -285,7 +276,7 @@ export class SnakeApp {
         this.ctx.textAlign = "left";
         this.ctx.fillText(`PLAYER: ${this.playerName}`, this.offsetX, 160);
 
-        // Frame
+        // Board Frame
         this.ctx.strokeStyle = "#555555";
         this.ctx.lineWidth = 10;
         this.ctx.strokeRect(
@@ -301,15 +292,19 @@ export class SnakeApp {
         this.ctx.save();
         this.ctx.translate(this.offsetX, this.offsetY);
 
-        // Food
-        this.ctx.fillStyle = "#FF0000";
-        this.ctx.fillRect(this.food.x * this.gridSize, this.food.y * this.gridSize, this.gridSize, this.gridSize);
+        // 1. Food (Red Glow)
+        this.ctx.shadowBlur = 20;
+        this.ctx.shadowColor = "rgba(255, 0, 0, 0.8)";
+        this.drawBlock(this.food.x, this.food.y, "#FF0000");
 
-        // Snake
-        this.ctx.fillStyle = "#00FF00";
+        // 2. Snake (Green Glow)
+        this.ctx.shadowColor = "rgba(0, 255, 0, 0.8)";
         this.snake.forEach(seg => {
-            this.ctx.fillRect(seg.x * this.gridSize, seg.y * this.gridSize, this.gridSize - 2, this.gridSize - 2);
+            this.drawBlock(seg.x, seg.y, "#00FF00");
         });
+
+        // Reset Glow
+        this.ctx.shadowBlur = 0;
 
         // Game Over Overlay
         if (this.gameState === 'GAME_OVER') {
@@ -329,13 +324,33 @@ export class SnakeApp {
             this.ctx.fillText("Press [ENTER] to Restart", this.gameWidth / 2, this.gameHeight / 2 + 40);
             this.ctx.fillText("Press [ESC] to Quit", this.gameWidth / 2, this.gameHeight / 2 + 80);
 
-            // Show Leaderboard on Game Over too
-            this.ctx.restore(); // Restore to global coordinates for leaderboard
+            this.ctx.restore(); 
             this.drawLeaderboard(this.canvas.width / 2, this.gameHeight - 40);
             return;
         }
 
         this.ctx.restore();
+    }
+
+    drawBlock(x, y, color) {
+        // --- VISUAL SETTINGS ---
+        const gap = 4;           // Space between blocks
+        const cornerRadius = 12;  // Roundness of blocks
+        
+        const size = this.gridSize - gap;
+        const offset = gap / 2;
+
+        const px = (x * this.gridSize) + offset;
+        const py = (y * this.gridSize) + offset;
+
+        this.ctx.fillStyle = color;
+        this.ctx.beginPath();
+        if (this.ctx.roundRect) {
+            this.ctx.roundRect(px, py, size, size, cornerRadius);
+        } else {
+            this.ctx.rect(px, py, size, size);
+        }
+        this.ctx.fill();
     }
 
     drawLeaderboard(x, y) {
