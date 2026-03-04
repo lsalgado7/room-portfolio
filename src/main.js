@@ -2,15 +2,16 @@
 import * as THREE from 'three';
 // Utils
 import { OrbitControls } from './utils/orbit-controls.js';
+import { animateSceneObjects } from './utils/animations.js';
 // UI
 import { initLoadingScreen, returnToLanding } from './ui/landing-page.js';
-import { initModalEvents } from './ui/modals.js';
+import { initModalEvents, showModal, modals } from './ui/modals.js';
 import { EmbedPlayer } from './ui/music-player.js';
 // World
-import { loadRoomScene, fans, interactSign } from './world/loaders.js';
+import { loadRoomScene, fans, interactSign, chairSeat } from './world/loaders.js';
 // Interaction
 import { setupRaycasterEvents, updateObjectHover } from './interaction/raycasts.js';
-import { setupDesktopViewEvents } from './interaction/desktop-view.js';
+import { setupDesktopViewEvents, isDesktopViewActive } from './interaction/desktop-view.js';
 // Systems
 import { computer } from './systems/monitor.js';
 
@@ -81,7 +82,13 @@ function setupTipsToggle() {
   const helpIcon = document.getElementById('help-icon');
   
   const toggleTips = () => {
-    tipsBox.classList.toggle('hidden');
+    // Check if the hidden class was added or removed
+    const isHidden = tipsBox.classList.toggle('hidden');
+    
+    // Only update the interact sign if we aren't currently zoomed into the desktop
+    if (interactSign && !isDesktopViewActive) {
+      interactSign.visible = !isHidden;
+    }
   };
 
   // Keyboard 'H' Toggle
@@ -90,7 +97,18 @@ function setupTipsToggle() {
   });
 
   // Help Icon Click
-  helpIcon.addEventListener('click', toggleTips);
+  if (helpIcon) helpIcon.addEventListener('click', toggleTips);
+}
+
+function setupCredits() {
+  const creditsBtn = document.getElementById('credits-icon');
+  
+  if (creditsBtn && modals.credits) {
+    creditsBtn.addEventListener('click', () => {
+      // Pass controls so it disables OrbitControls while the modal is open
+      showModal(modals.credits, controls); 
+    });
+  }
 }
 
 // Initialize Music Player
@@ -105,19 +123,19 @@ function setupNavigation() {
     }
 }
 
-// Call this alongside your other setup functions
+// initialize objects
 setupNavigation();
-
-// Call this in your main initialization
 setupTipsToggle();
+setupCredits();
 
 // --- TIME SETUP ---
 const clock = new THREE.Clock();
 
 // Render Loop
 const render = () =>{
-  // Calculate Delta Time (in seconds)
+  // Calculate Delta Time (in seconds) and Elapsed Time
   const deltaTimeSeconds = clock.getDelta();
+  const elapsedTime = clock.getElapsedTime();
   
   // Update controls
   controls.update();
@@ -129,14 +147,7 @@ const render = () =>{
   // Updates object hover state
   updateObjectHover();
   
-  // Animations
-  fans.forEach(fan => {
-    fan.rotation.y += 0.05
-  })
-  if (interactSign && interactSign.visible) {
-    // Moves up and down using a sine wave
-    interactSign.position.y += Math.sin(Date.now() / 500) * 0.001; 
-  }
+  animateSceneObjects(elapsedTime, fans, interactSign, chairSeat)
 
   // Do rendering
   renderer.render(scene, camera);

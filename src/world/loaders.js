@@ -4,8 +4,8 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 // Go up to config
 import { textureMap, notClickable } from '../config/mappings.js';
-// Sibling file in same folder
 import { createVideoMaterial, initMaterials, glassMaterial } from './materials.js';
+import { registerKey } from '../systems/keys.js';
 // Go up to main
 import { raycasterObjects } from '../main.js';
 
@@ -23,6 +23,8 @@ const loadedTextures = {};
 export const fans = [];
 export let screenMesh = null;
 export let interactSign = null;
+export let chairSeat = null;
+export let chairLegs = null;
 
 // Load and process all textures from the map
 // EX: If obj has 'one' in the name, load its texture from TS_one
@@ -46,6 +48,23 @@ export const loadRoomScene = (scene) => {
   gltfLoader.load("/models/Room_Portfolio.glb", (glb) => {
     glb.scene.traverse(child => {
       if (child.isMesh) {
+        if (child.name.startsWith('key_')) {
+          registerKey(child);
+        }
+
+        // capture chair seat & save its base position
+        if (child.name.includes('chair_seat')) {
+          chairSeat = child;
+          child.userData.baseRotationY = child.rotation.y;
+          child.userData.basePosition = child.position.clone(); 
+        }
+
+        // capture chair legs & save its base position
+        if (child.name.includes('chair_legs')) {
+          chairLegs = child;
+          child.userData.basePosition = child.position.clone(); 
+        }
+
         // make the desktop hitbox invisible and setup sign
         if (child.name.includes('click_desktop')) {
           child.material.visible = false;

@@ -7,7 +7,8 @@ export let isModalActive = false;
 export const modals = {
   work: document.querySelector(".modal.work"),
   about: document.querySelector(".modal.about"),
-  contact: document.querySelector(".modal.contact")
+  contact: document.querySelector(".modal.contact"),
+  credits: document.querySelector(".modal.credits")
 }
 
 export function initModalEvents(controls) {

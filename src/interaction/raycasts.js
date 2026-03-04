@@ -61,7 +61,10 @@ export function updateObjectHover() {
 
   currentObject = object;
 
-  if (object.name.includes("click")) {
+  // Ensure any object not on the 'notClickable' list receives the hover state
+  const isInteractable = !notClickable.some(name => object.name.includes(name));
+
+  if (isInteractable) {
     if (object !== prevObject) {
       if (prevObject) {
         playHoverAnimation(prevObject, false);

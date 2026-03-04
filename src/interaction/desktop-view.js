@@ -4,7 +4,7 @@ import * as THREE from 'three';
 // Systems
 import { computer } from '../systems/monitor.js';
 // World
-import { interactSign } from '../world/loaders.js';
+import { interactSign, chairSeat, chairLegs } from '../world/loaders.js';
 
 // State to track if we are currently at the desk
 export let isDesktopViewActive = false;
@@ -77,6 +77,18 @@ export function enterDesktopView(camera, controls) {
         ease: "power2.inOut"
     });
 
+    // 4. Animate Chair Backwards
+    if (chairSeat && chairLegs) {
+        // NOTE: "-=3" moves it relative to its current position on the Z axis.
+        // Depending on your Blender export orientation, you might need to 
+        // change this to "+=3" or use the "x" axis (e.g., x: "-=3") instead.
+        gsap.to([chairSeat.position, chairLegs.position], {
+            z: "-=1", 
+            duration: 1.5,
+            ease: "power2.inOut"
+        });
+    }
+
     // 4. Animate Camera Target (where it looks)
     gsap.to(controls.target, {
         x: DESKTOP_TARGET_POS.x,
@@ -110,6 +122,25 @@ export function exitDesktopView(camera, controls) {
         ease: "power2.inOut"
     });
 
+    // Animate Chair Back to the Desk
+    if (chairSeat && chairLegs) {
+        gsap.to(chairSeat.position, {
+            x: chairSeat.userData.basePosition.x,
+            y: chairSeat.userData.basePosition.y,
+            z: chairSeat.userData.basePosition.z,
+            duration: 1.2,
+            ease: "power2.inOut"
+        });
+        
+        gsap.to(chairLegs.position, {
+            x: chairLegs.userData.basePosition.x,
+            y: chairLegs.userData.basePosition.y,
+            z: chairLegs.userData.basePosition.z,
+            duration: 1.2,
+            ease: "power2.inOut"
+        });
+    }
+
     // 2. Animate target back
     gsap.to(controls.target, {
         x: originalTarget.x,
@@ -121,8 +152,12 @@ export function exitDesktopView(camera, controls) {
         onComplete: () => {
             computer.unmount();
 
-            // Reveal sign on exit
-            if (interactSign) interactSign.visible = true;
+            // Reveal sign on exit ONLY if the tips menu is currently visible
+            if (interactSign) {
+                const tipsBox = document.getElementById('tips-box');
+                const isTipsHidden = tipsBox ? tipsBox.classList.contains('hidden') : false;
+                interactSign.visible = !isTipsHidden;
+            }
 
             // 3. Re-enable controls
             controls.enableRotate = true;
