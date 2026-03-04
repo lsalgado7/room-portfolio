@@ -1,3 +1,5 @@
+import { LeaderboardHelper } from "../utils/leaderboard";
+
 export class SnakeApp {
     constructor(canvas, ctx, callbacks) {
         this.canvas = canvas;
@@ -24,9 +26,7 @@ export class SnakeApp {
         
         // --- GAME STATE & LEADERBOARD ---
         this.gameState = 'NAME_ENTRY'; // Options: NAME_ENTRY, PLAYING, GAME_OVER
-        this.playerName = "";
-        this.maxNameLength = 10;
-        this.leaderboard = this.loadLeaderboard(); 
+        this.leaderboard = new LeaderboardHelper('snake');
 
         this.inputQueue = [];
         this.handleInput = this.handleInput.bind(this);
@@ -84,23 +84,11 @@ export class SnakeApp {
 
         // --- STATE: ENTER NAME ---
         if (this.gameState === 'NAME_ENTRY') {
-            if (e.key === 'Enter') {
-                if (this.playerName.trim().length > 0) {
-                    this.gameState = 'PLAYING';
-                    this.draw();
-                }
-                return;
-            }
-            if (e.key === 'Backspace') {
-                this.playerName = this.playerName.slice(0, -1);
+            if (this.leaderboard.handleNameInput(e, () => { 
+                this.gameState = 'PLAYING';
+                this.draw(); 
+            })) {
                 this.draw();
-                return;
-            }
-            if (e.key.length === 1 && this.playerName.length < this.maxNameLength) {
-                if (/[a-zA-Z0-9 ]/.test(e.key)) {
-                    this.playerName += e.key.toUpperCase();
-                    this.draw();
-                }
             }
             return;
         }
@@ -217,7 +205,7 @@ export class SnakeApp {
     triggerGameOver() {
         this.gameOver = true;
         this.gameState = 'GAME_OVER';
-        this.saveScore(); 
+        this.leaderboard.saveScore(this.score);
         this.draw();
     }
 
@@ -226,45 +214,21 @@ export class SnakeApp {
         this.ctx.fillStyle = "#222222";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // --- TITLE ---
-        this.ctx.fillStyle = "#00FF00";
-        this.ctx.font = "bold 100px monospace";
-        this.ctx.textAlign = "center";
-        this.ctx.textBaseline = "middle";
-        this.ctx.fillText("SNAKE", this.canvas.width / 2, 100);
-
         // --- DRAW BASED ON STATE ---
 
         if (this.gameState === 'NAME_ENTRY') {
-            this.drawNameEntry();
+            this.leaderboard.drawNameEntry(this.ctx, this.canvas.width, this.canvas.height, "SNAKE");
         } else {
+            // --- TITLE ---
+            this.ctx.fillStyle = "#00FF00";
+            this.ctx.font = "bold 100px monospace";
+            this.ctx.textAlign = "center";
+            this.ctx.textBaseline = "middle";
+            this.ctx.fillText("SNAKE", this.canvas.width / 2, 100);
+
+            // Draw game
             this.drawGameInterface();
         }
-    }
-
-    drawNameEntry() {
-        const cx = this.canvas.width / 2;
-        const cy = this.canvas.height / 2;
-
-        this.ctx.fillStyle = "#FFFFFF";
-        this.ctx.font = "40px monospace";
-        this.ctx.fillText("ENTER PLAYER NAME", cx, cy - 80);
-
-        this.ctx.fillStyle = "#000000";
-        this.ctx.strokeStyle = "#00FF00";
-        this.ctx.lineWidth = 4;
-        this.ctx.fillRect(cx - 200, cy - 40, 400, 80);
-        this.ctx.strokeRect(cx - 200, cy - 40, 400, 80);
-
-        this.ctx.fillStyle = "#00FF00";
-        this.ctx.font = "bold 50px monospace";
-        this.ctx.fillText(this.playerName + (Math.floor(Date.now() / 500) % 2 ? "_" : " "), cx, cy + 5);
-
-        this.ctx.fillStyle = "#AAAAAA";
-        this.ctx.font = "30px monospace";
-        this.ctx.fillText("Press [ENTER] to Start", cx, cy + 100);
-
-        this.drawLeaderboard(cx, cy + 200);
     }
 
     drawGameInterface() {
@@ -274,7 +238,7 @@ export class SnakeApp {
         this.ctx.textAlign = "right";
         this.ctx.fillText(`SCORE: ${this.score}`, this.canvas.width - this.offsetX, 160);
         this.ctx.textAlign = "left";
-        this.ctx.fillText(`PLAYER: ${this.playerName}`, this.offsetX, 160);
+        this.ctx.fillText(`PLAYER: ${this.leaderboard.playerName}`, this.offsetX, 160);
 
         // Board Frame
         this.ctx.strokeStyle = "#555555";
@@ -325,7 +289,7 @@ export class SnakeApp {
             this.ctx.fillText("Press [ESC] to Quit", this.gameWidth / 2, this.gameHeight / 2 + 80);
 
             this.ctx.restore(); 
-            this.drawLeaderboard(this.canvas.width / 2, this.gameHeight - 40);
+            this.leaderboard.drawScores(this.ctx, this.canvas.width / 2, this.gameHeight - 40, this.score);
             return;
         }
 
@@ -351,24 +315,5 @@ export class SnakeApp {
             this.ctx.rect(px, py, size, size);
         }
         this.ctx.fill();
-    }
-
-    drawLeaderboard(x, y) {
-        this.ctx.fillStyle = "#FFFF00";
-        this.ctx.font = "bold 35px monospace";
-        this.ctx.textAlign = "center";
-        this.ctx.fillText("- HIGH SCORES -", x, y);
-
-        this.ctx.font = "30px monospace";
-        this.ctx.fillStyle = "#FFFFFF";
-        
-        if (this.leaderboard.length === 0) {
-            this.ctx.fillText("No scores yet!", x, y + 40);
-        } else {
-            this.leaderboard.forEach((entry, index) => {
-                const text = `${index + 1}. ${entry.name} - ${entry.score}`;
-                this.ctx.fillText(text, x, y + 40 + (index * 40));
-            });
-        }
     }
 }

@@ -1,3 +1,5 @@
+import { LeaderboardHelper } from "../utils/leaderboard";
+
 export class TetrisApp {
     constructor(canvas, ctx, callbacks) {
         this.canvas = canvas;
@@ -41,7 +43,7 @@ export class TetrisApp {
         ];
 
         // --- LEADERBOARD ---
-        this.highScores = JSON.parse(localStorage.getItem('tetris_scores')) || [];
+        this.leaderboard = new LeaderboardHelper('tetris');
     }
 
     onStart() {
@@ -86,12 +88,12 @@ export class TetrisApp {
         let matrix;
         switch(type) {
             case 'T': matrix = [[0,1,0],[1,1,1],[0,0,0]]; break;
-            case 'I': matrix = [[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]]; break;
-            case 'L': matrix = [[0,1,0],[0,1,0],[0,1,1]]; break;
-            case 'J': matrix = [[0,1,0],[0,1,0],[1,1,0]]; break;
-            case 'O': matrix = [[1,1],[1,1]]; break;
-            case 'Z': matrix = [[1,1,0],[0,1,1],[0,0,0]]; break;
-            case 'S': matrix = [[0,1,1],[1,1,0],[0,0,0]]; break;
+            case 'I': matrix = [[0,2,0,0],[0,2,0,0],[0,2,0,0],[0,2,0,0]]; break;
+            case 'L': matrix = [[0,3,0],[0,3,0],[0,3,3]]; break;
+            case 'J': matrix = [[0,4,0],[0,4,0],[4,4,0]]; break;
+            case 'O': matrix = [[5,5],[5,5]]; break;
+            case 'Z': matrix = [[6,6,0],[0,6,6],[0,0,0]]; break;
+            case 'S': matrix = [[0,7,7],[7,7,0],[0,0,0]]; break;
         }
         return {
             matrix: matrix,
@@ -110,19 +112,10 @@ export class TetrisApp {
         // --- START SCREEN INPUT ---
         if (this.gameState === 'START') {
             e.preventDefault();
-            if (e.key === 'Enter') {
-                if (this.playerName.trim().length > 0) {
-                    this.resetGame();
-                }
-            } else if (e.key === 'Backspace') {
-                this.playerName = this.playerName.slice(0, -1);
-            } else if (e.key.length === 1 && this.playerName.length < 10) {
-                // Allow letters and numbers only
-                if (/[a-zA-Z0-9 ]/.test(e.key)) {
-                    this.playerName += e.key.toUpperCase();
-                }
+            // Pass input to leaderboard helper
+            if (this.leaderboard.handleNameInput(e, () => { this.resetGame(); })) {
+                this.draw();
             }
-            this.draw();
             return;
         }
 
@@ -222,7 +215,8 @@ export class TetrisApp {
         player.matrix.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value !== 0) {
-                    arena[y + player.pos.y][x + player.pos.x] = Math.floor(Math.random() * 7) + 1;
+                    // Set the board to the piece's specific color value
+                    arena[y + player.pos.y][x + player.pos.x] = value;
                 }
             });
         });
@@ -258,24 +252,7 @@ export class TetrisApp {
 
     endGame() {
         this.gameState = 'GAMEOVER';
-        this.checkHighScore();
-        this.draw();
-    }
-
-    checkHighScore() {
-        // Just save directly using the name they entered at start
-        const name = this.playerName || "ANON";
-        this.saveHighScore(name, this.score);
-    }
-
-    saveHighScore(name, score) {
-        const newScore = { name, score };
-        this.highScores.push(newScore);
-        
-        this.highScores.sort((a, b) => b.score - a.score);
-        this.highScores.splice(5);
-
-        localStorage.setItem('tetris_scores', JSON.stringify(this.highScores));
+        this.leaderboard.saveScore(this.score);
         this.draw();
     }
 
@@ -301,32 +278,7 @@ export class TetrisApp {
 
         // --- STATE: START SCREEN ---
         if (this.gameState === 'START') {
-            this.ctx.fillStyle = "#00FF00";
-            this.ctx.font = "bold 80px monospace";
-            this.ctx.textAlign = "center";
-            this.ctx.fillText("TETRIS", this.canvas.width / 2, 300);
-
-            this.ctx.fillStyle = "#FFFFFF";
-            this.ctx.font = "40px monospace";
-            this.ctx.fillText("ENTER PLAYER NAME:", this.canvas.width / 2, 450);
-
-            // Draw Input Box
-            this.ctx.fillStyle = "#000000";
-            this.ctx.fillRect(this.canvas.width/2 - 200, 500, 400, 60);
-            this.ctx.strokeStyle = "#00FF00";
-            this.ctx.lineWidth = 4;
-            this.ctx.strokeRect(this.canvas.width/2 - 200, 500, 400, 60);
-
-            // Draw Name + Blinking Cursor
-            this.ctx.fillStyle = "#00FF00";
-            this.ctx.font = "40px monospace";
-            // Blinking effect using Date.now()
-            const cursor = Math.floor(Date.now() / 500) % 2 === 0 ? "_" : " ";
-            this.ctx.fillText((this.playerName + cursor).toUpperCase(), this.canvas.width / 2, 545);
-
-            this.ctx.fillStyle = "#AAAAAA";
-            this.ctx.font = "30px monospace";
-            this.ctx.fillText("PRESS [ENTER] TO START", this.canvas.width / 2, 700);
+            this.leaderboard.drawNameEntry(this.ctx, this.canvas.width, this.canvas.height, "TETRIS");
             return;
         }
 
@@ -354,7 +306,7 @@ export class TetrisApp {
             this.player.matrix.forEach((row, y) => {
                 row.forEach((value, x) => {
                     if (value !== 0) {
-                        this.drawBlock(x + this.player.pos.x, y + this.player.pos.y, "#FFFFFF");
+                        this.drawBlock(x + this.player.pos.x, y + this.player.pos.y, this.colors[value]);
                     }
                 });
             });
@@ -372,7 +324,7 @@ export class TetrisApp {
         this.ctx.font = "30px monospace";
         this.ctx.fillStyle = "#AAAAAA";
         this.ctx.textAlign = "center"; 
-        this.ctx.fillText(`PLAYER: ${this.playerName}`, this.canvas.width / 2, this.offsetY + this.gameHeight + 60);
+        this.ctx.fillText(`PLAYER: ${this.leaderboard.playerName}`, this.canvas.width / 2, this.offsetY + this.gameHeight + 60);
         
         // Left Side: Level
         this.ctx.fillStyle = "#FFFFFF";
@@ -391,33 +343,11 @@ export class TetrisApp {
             
             this.ctx.fillStyle = "#FF0000";
             this.ctx.font = "bold 50px monospace";
+            this.ctx.textAlign = "center";
             this.ctx.fillText("GAME OVER", this.canvas.width/2, this.offsetY + 80);
 
-            // Leaderboard
-            this.ctx.fillStyle = "#FFFF00";
-            this.ctx.font = "bold 30px monospace";
-            this.ctx.fillText("HIGH SCORES", this.canvas.width/2, this.offsetY + 160);
-
-            this.ctx.fillStyle = "#FFFFFF";
-            this.ctx.font = "24px monospace";
-            this.ctx.textAlign = "center";
-
-            if (this.highScores.length === 0) {
-                this.ctx.fillText("No scores yet!", this.canvas.width/2, this.offsetY + 220);
-            } else {
-                this.highScores.forEach((s, index) => {
-                    const yPos = this.offsetY + 220 + (index * 40);
-                    const text = `${index + 1}. ${s.name.padEnd(10, ' ')}  ${s.score}`;
-                    
-                    // Highlight current run if it made the board
-                    if (s.score === this.score && s.name === this.playerName) {
-                         this.ctx.fillStyle = "#00FF00";
-                    } else {
-                         this.ctx.fillStyle = "#FFFFFF";
-                    }
-                    this.ctx.fillText(text, this.canvas.width/2, yPos);
-                });
-            }
+            // Let the helper draw the scores inside the game over box
+            this.leaderboard.drawScores(this.ctx, this.canvas.width/2, this.offsetY + 160, this.score);
 
             this.ctx.fillStyle = "#00FF00";
             this.ctx.font = "20px monospace";
@@ -426,12 +356,23 @@ export class TetrisApp {
     }
 
     drawBlock(x, y, color) {
+        // --- VISUAL SETTINGS ---
+        const gap = 2;           // Space between blocks
+        const cornerRadius = 8;  // Roundness of blocks
+        
+        const size = this.blockSize - gap;
+        const offset = gap / 2;
+
+        const px = this.offsetX + (x * this.blockSize) + offset;
+        const py = this.offsetY + (y * this.blockSize) + offset;
+
         this.ctx.fillStyle = color;
-        this.ctx.fillRect(
-            this.offsetX + x * this.blockSize, 
-            this.offsetY + y * this.blockSize, 
-            this.blockSize - 2, 
-            this.blockSize - 2
-        );
+        this.ctx.beginPath();
+        if (this.ctx.roundRect) {
+            this.ctx.roundRect(px, py, size, size, cornerRadius);
+        } else {
+            this.ctx.rect(px, py, size, size);
+        }
+        this.ctx.fill();
     }
 }

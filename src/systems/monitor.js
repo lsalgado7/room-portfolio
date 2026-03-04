@@ -3,6 +3,7 @@ import { screenMesh } from '../world/loaders.js';
 import { SnakeApp } from '../apps/snakeApp.js';
 import { MenuApp } from '../apps/menuApp.js';
 import { TetrisApp } from '../apps/tetrisApp.js';
+import { TypingApp } from '../apps/typingApp.js';
 
 export class Monitor {
     constructor() {
@@ -31,7 +32,8 @@ export class Monitor {
         this.apps = {
             'menu': MenuApp,
             'snake': SnakeApp,
-            'tetris': TetrisApp
+            'tetris': TetrisApp,
+            'typing': TypingApp
         };
 
         // --- SYSTEM CALLBACKS ---

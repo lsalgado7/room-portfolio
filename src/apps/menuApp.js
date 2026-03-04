@@ -7,6 +7,7 @@ export class MenuApp {
         this.options = [
             { label: "Play Snake", action: () => this.callbacks.launch('snake') },
             { label: "Play Tetris", action: () => this.callbacks.launch('tetris')},
+            { label: "Typing Test", action: () => this.callbacks.launch('typing')},
             { label: "Shut Down", action: () => this.callbacks.exit() }
         ];
         this.selectedIndex = 0;
@@ -83,7 +84,7 @@ export class MenuApp {
 
         // 4. Footer
         this.ctx.font = "30px monospace";
-        this.ctx.fillStyle = "#004400";
-        this.ctx.fillText("[UP/DOWN] to Select  [ENTER] to Confirm", this.canvas.width / 2, 900);
+        this.ctx.fillStyle = "#00aa00";
+        this.ctx.fillText("[UP/DOWN] to Select  [ENTER] to Confirm", this.canvas.width / 2, 1000);
     }
 }
