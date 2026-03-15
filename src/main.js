@@ -93,7 +93,7 @@ function setupTipsToggle() {
 
   // Keyboard 'H' Toggle
   window.addEventListener('keydown', (e) => {
-    if (e.key.toLowerCase() === 'h') toggleTips();
+    if (e.key.toLowerCase() === 'h' && !isDesktopViewActive) toggleTips();
   });
 
   // Help Icon Click

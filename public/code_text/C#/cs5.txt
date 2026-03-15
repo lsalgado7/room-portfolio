@@ -1,0 +1,13 @@
+public void Dfs(char[][] grid, int r, int c) 
+{
+    int nr = grid.Length;
+    int nc = grid[0].Length;
+    
+    if (r < 0 || c < 0 || r >= nr || c >= nc || grid[r][c] == '0') return;
+    
+    grid[r][c] = '0';
+    Dfs(grid, r - 1, c);
+    Dfs(grid, r + 1, c);
+    Dfs(grid, r, c - 1);
+    Dfs(grid, r, c + 1);
+}

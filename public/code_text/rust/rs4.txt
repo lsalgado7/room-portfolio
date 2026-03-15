@@ -1,0 +1,17 @@
+pub fn merge(mut intervals: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+    if intervals.is_empty() { return vec![]; }
+    intervals.sort_unstable_by_key(|a| a[0]);
+    
+    let mut merged: Vec<Vec<i32>> = vec![intervals[0].clone()];
+    
+    for interval in intervals.into_iter().skip(1) {
+        let last = merged.last_mut().unwrap();
+        if last[1] >= interval[0] {
+            last[1] = std::cmp::max(last[1], interval[1]);
+        } else {
+            merged.push(interval);
+        }
+    }
+    
+    merged
+}

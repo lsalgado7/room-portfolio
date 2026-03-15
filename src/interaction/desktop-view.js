@@ -33,7 +33,9 @@ export function setupDesktopViewEvents(camera, controls) {
 export function enterDesktopView(camera, controls) {
     if (isDesktopViewActive) return;
 
-    // Hide sign on enter
+    // Hide tips and sign on enter
+    const tipsBox = document.getElementById('tips-box');
+    if (tipsBox) tipsBox.classList.add('hidden');
     if (interactSign) interactSign.visible = false;
 
     // 1. Save current state
